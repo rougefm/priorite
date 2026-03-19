@@ -3,281 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rouge - Toujours un hit</title>
+    <title>Studio Rouge FM</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eef2f5; padding: 20px; margin: 0; color: #333; }
-        
-        /* --- ÉCRAN DE CONNEXION (MOT DE PASSE) --- */
-        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #d32f2f; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: 0.5s; }
-        #login-screen img { max-height: 80px; margin-bottom: 20px; }
-        .login-box { background: rgba(0,0,0,0.1); padding: 40px; border-radius: 15px; text-align: center; }
-        .login-box h2 { margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
-        #passInput { width: 100%; padding: 15px; font-size: 18px; border: none; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; text-align: center; outline: none;}
-        #btnEntrer { background: white; color: #d32f2f; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; width: 100%;}
-        #btnEntrer:hover { background: #f0f0f0; transform: scale(1.05); }
-        #errorMsg { color: #ffcccc; font-weight: bold; margin-top: 15px; display: none; }
-
-        /* --- LE RESTE DE L'APPLICATION --- */
-        .dashboard-layout { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1300px; margin: 0 auto; align-items: flex-start;}
-        
-        /* --- COLONNE GAUCHE (Priorités d'antenne - fond rouge) --- */
-        .priorities-panel { flex: 1 1 350px; background: #d32f2f; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(211,47,47,0.3); color: white;}
-        .priority-main-title { font-size: 1.4em; font-weight: 900; margin-top: 0; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px;}
-        
-        .day-title { font-size: 1.1em; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;}
-        
-        .priority-item { background: rgba(255,255,255,0.1); padding: 15px; margin-bottom: 15px; border-radius: 8px; font-size: 1.05em; font-weight: 600; line-height: 1.4; border-left: 4px solid #fff;}
-        .priority-item-future { background: rgba(255,255,255,0.05); border-left-color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.85); font-size: 0.95em;}
-        
-        .priority-empty { font-style: italic; opacity: 0.8; margin-bottom: 20px;}
-
-        /* --- COLONNE DROITE (Recherche + Gros shows) --- */
-        .shows-panel { flex: 2 1 600px; display: flex; flex-direction: column; gap: 20px; }
-        
-        /* Boîte de recherche */
-        .search-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 5px; justify-content: center;}
-        .header-top img { max-height: 45px; }
-        h1 { color: #111; margin: 0; font-size: 1.8em; text-transform: uppercase; font-weight: 900; letter-spacing: -0.5px;}
-        
-        .slogan { color: #d32f2f; font-weight: bold; font-style: italic; font-size: 1.1em; margin-top: 5px; margin-bottom: 5px; text-align: center; }
-        .ia-warning { font-size: 0.85em; color: #888; font-style: italic; text-align: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-top: 0; margin-bottom: 25px; }
-
-        input#searchBar { width: 100%; padding: 18px; font-size: 18px; border: 2px solid #ddd; border-radius: 30px; outline: none; box-sizing: border-box; transition: 0.3s; background-color: #fafafa; margin-bottom: 10px;}
-        input#searchBar:focus { border-color: #d32f2f; background-color: #fff; box-shadow: 0 0 10px rgba(211,47,47,0.1); }
-        
-        #resultArea { text-align: left; background: #fdfdfd; padding: 20px; border-radius: 10px; border: 1px solid #eee; display: none; margin-top: 15px; }
-        .artist-name { font-size: 1.8em; font-weight: 900; color: #111; border-bottom: 4px solid #d32f2f; margin-bottom: 20px; padding-bottom: 8px; text-transform: uppercase; margin-top: 0;}
-        .section-title { font-size: 0.9em; text-transform: uppercase; color: #777; margin-top: 25px; margin-bottom: 12px; letter-spacing: 1.5px; font-weight: bold; border-left: 4px solid #d32f2f; padding-left: 10px;}
-        
-        .show-card { background: #fff; border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); border-left: 4px solid #ccc;}
-        .highlight { border-left-color: #fbc02d; background: #fffde7; }
-        .show-date { font-weight: 800; color: #111; font-size: 1.1em; margin-bottom: 5px;}
-        .show-venue { font-size: 1em; color: #555; font-weight: 500;}
-        
-        .btn-container { display: flex; gap: 10px; margin-top: 25px; }
-        .btn-action { flex: 1; display: block; padding: 14px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; box-sizing: border-box; transition: 0.2s; font-size: 1em; border: 2px solid transparent;}
-        .btn-ticketmaster { background-color: #fff; color: #d32f2f; border-color: #d32f2f;}
-        .btn-ticketmaster:hover { background-color: #d32f2f; color: #fff; }
-        .btn-google { background-color: #4285F4; color: white; border-color: #4285F4;}
-        .btn-google:hover { background-color: #3367d6; border-color: #3367d6;}
-        
-        .search-error-msg { color: #d32f2f; font-weight: bold; text-align: center; font-size: 1.1em; margin-top: 20px;}
-
-        /* Boîte des Gros Shows */
-        .shows-box { background: white; padding: 25px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .box-title { font-size: 1.3em; font-weight: 900; color: #111; border-bottom: 2px solid #222; margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; text-transform: uppercase;}
-        
-        .grid-shows { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
-        .auto-card { background: #f9f9f9; padding: 15px; border-radius: 8px; border-left: 4px solid #d32f2f;}
-        .auto-card.bell { border-left-color: #fbc02d; background: #fffde7; }
-        .auto-artist { font-weight: 900; color: #222; font-size: 1.1em; margin-bottom: 5px; text-transform: uppercase;}
-        .auto-date { font-weight: 700; color: #d32f2f; font-size: 0.9em; }
-        .auto-card.bell .auto-date { color: #f57f17; }
-        .auto-venue { font-size: 0.85em; color: #666; margin-top: 4px;}
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        #ecran-mdp { background-color: #d32f2f; color: white; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #ecran-mdp input { padding: 10px; font-size: 16px; margin: 10px; text-align: center; }
+        #ecran-mdp button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: white; color: #d32f2f; border: none; font-weight: bold; }
+        #contenu-principal { display: none; padding: 20px; max-width: 800px; margin: auto; background: white; min-height: 100vh; }
+        .boite-priorites { background: #ffebee; border-left: 5px solid #d32f2f; padding: 15px; margin-bottom: 30px; }
+        .boite-priorites h2 { color: #b71c1c; margin-top: 0; }
+        .boite-priorites li { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; }
+        .boite-spectacles h3 { color: #d32f2f; margin-bottom: 5px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .boite-spectacles li { margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
-<div id="login-screen">
-    <div class="login-box">
-        <img src="https://upload.wikimedia.org/wikipedia/fr/a/a2/Rouge_FM_%28logo%29.svg" alt="Rouge FM">
-        <h2>Accès Studio</h2>
-        <input type="password" id="passInput" placeholder="Mot de passe..." onkeypress="if(event.key === 'Enter') verifierMotDePasse()">
-        <button id="btnEntrer" onclick="verifierMotDePasse()">Déverrouiller</button>
-        <p id="errorMsg">Mot de passe incorrect.</p>
-    </div>
-</div>
-
-<div class="dashboard-layout">
-
-    <div class="priorities-panel">
-        <h2 class="priority-main-title" id="titrePriorites">🎙️ Priorités Rouge</h2>
-        <div id="prioritesContainer">
-            </div>
+    <div id="ecran-mdp">
+        <h1>🎙️ Accès Studio Rouge</h1>
+        <input type="password" id="pwd" placeholder="Mot de passe">
+        <button onclick="verifierMdp()">Entrer</button>
     </div>
 
-    <div class="shows-panel">
+    <div id="contenu-principal">
+        <h1 style="text-align: center;">Outil Animateurs - Rouge FM</h1>
         
-        <div class="search-box">
-            <div class="header-top">
-                <img src="https://upload.wikimedia.org/wikipedia/fr/a/a2/Rouge_FM_%28logo%29.svg" alt="Rouge FM" onerror="this.style.display='none'">
-                <h1>Calendrier des spectacles</h1>
-            </div>
-            <p class="slogan">Toujours un hit</p>
-            <p class="ia-warning">⚠️ Attention, ce tableau est généré par l'IA.</p>
-            
-            <input type="text" id="searchBar" placeholder="Rechercher un artiste de notre répertoire..." onkeyup="recherche()">
-            <div id="resultArea"></div>
+        <div class="boite-priorites">
+            <h2>🔥 Priorités du Jour</h2>
+            <ul id="liste-priorites"></ul>
         </div>
 
-        <div class="shows-box">
-            <h2 class="box-title">🎟️ Gros événements à venir</h2>
-            <div class="grid-shows" id="autoMontrealList">
-                <div class="auto-card bell"><div class="auto-artist">LADY GAGA</div><div class="auto-date">2-3-6 Avril 2026</div><div class="auto-venue">Centre Bell, Montréal</div></div>
-                <div class="auto-card bell"><div class="auto-artist">RAYE</div><div class="auto-date">12 Avril 2026</div><div class="auto-venue">Place Bell, Laval</div></div>
-                <div class="auto-card bell"><div class="auto-artist">LEWIS CAPALDI</div><div class="auto-date">21 Avril 2026</div><div class="auto-venue">Centre Bell, Montréal</div></div>
-                <div class="auto-card bell"><div class="auto-artist">MIKA</div><div class="auto-date">4 Mai 2026</div><div class="auto-venue">Place Bell, Laval</div></div>
-                <div class="auto-card"><div class="auto-artist">LES TROIS ACCORDS</div><div class="auto-date">8 Mai 2026</div><div class="auto-venue">MTELUS, Montréal</div></div>
-                <div class="auto-card bell"><div class="auto-artist">ZAZ</div><div class="auto-date">23 Mai 2026</div><div class="auto-venue">Centre Bell, Montréal</div></div>
-                <div class="auto-card"><div class="auto-artist">BRUNO MARS</div><div class="auto-date">23 au 30 Mai 2026</div><div class="auto-venue">Rogers Stadium, Toronto</div></div>
-                <div class="auto-card"><div class="auto-artist">ROXANE BRUNEAU</div><div class="auto-date">25 Juin 2026</div><div class="auto-venue">FestiVoix de Trois-Rivières</div></div>
-                <div class="auto-card"><div class="auto-artist">FOUKI</div><div class="auto-date">13 Juillet 2026</div><div class="auto-venue">FEQ (Plaines d'Abraham)</div></div>
-                <div class="auto-card"><div class="auto-artist">ED SHEERAN</div><div class="auto-date">20-21-22 Août 2026</div><div class="auto-venue">Rogers Centre, Toronto</div></div>
-                <div class="auto-card bell"><div class="auto-artist">FOUKI</div><div class="auto-date">14 Novembre 2026</div><div class="auto-venue">Place Bell, Laval</div></div>
-            </div>
+        <div class="boite-spectacles">
+            <h2>📅 Calendrier des Spectacles 2026</h2>
+            <div id="liste-spectacles"></div>
         </div>
-
     </div>
 
-</div>
+    <script src="priorites.js"></script>
+    <script src="spectacles.js"></script>
 
-<script src="studio.js" onerror="afficherErreurChargement()"></script>
-
-<script>
-    // --- GESTION DU MOT DE PASSE ---
-    const MOT_DE_PASSE_STUDIO = "Toujoursunhit2026";
-
-    // Vérifier au démarrage si l'utilisateur s'est déjà connecté récemment
-    if(localStorage.getItem('accesRougeAutorise') === 'vrai') {
-        document.getElementById('login-screen').style.display = 'none';
-        chargerLeContenu();
-    }
-
-    function verifierMotDePasse() {
-        const input = document.getElementById('passInput').value;
-        if(input === MOT_DE_PASSE_STUDIO) {
-            document.getElementById('login-screen').style.display = 'none';
-            localStorage.setItem('accesRougeAutorise', 'vrai');
-            chargerLeContenu();
-        } else {
-            document.getElementById('errorMsg').style.display = 'block';
-        }
-    }
-
-
-    // --- GESTION DES PRIORITÉS (3 JOURS) ---
-    function chargerLeContenu() {
-        const conteneur = document.getElementById('prioritesContainer');
-        
-        if (typeof prioritesSemaine !== 'undefined') {
-            const joursDelaSemaine = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-            
-            const indexAujourdhui = new Date().getDay();
-            const indexDemain = (indexAujourdhui + 1) % 7;
-            const indexApresDemain = (indexAujourdhui + 2) % 7;
-            
-            const jourAujourdhui = joursDelaSemaine[indexAujourdhui];
-            const jourDemain = joursDelaSemaine[indexDemain];
-            const jourApresDemain = joursDelaSemaine[indexApresDemain];
-            
-            let html = "";
-            
-            html += `<div class="day-title">Aujourd'hui (${jourAujourdhui})</div>`;
-            const prioAujourdhui = prioritesSemaine[jourAujourdhui];
-            if (prioAujourdhui && prioAujourdhui.length > 0) {
-                prioAujourdhui.forEach(p => { html += `<div class="priority-item">${p}</div>`; });
-            } else { html += `<p class="priority-empty">Rien à l'agenda pour aujourd'hui.</p>`; }
-
-            html += `<div class="day-title" style="margin-top: 25px;">Demain (${jourDemain})</div>`;
-            const prioDemain = prioritesSemaine[jourDemain];
-            if (prioDemain && prioDemain.length > 0) {
-                prioDemain.forEach(p => { html += `<div class="priority-item priority-item-future">${p}</div>`; });
-            } else { html += `<p class="priority-empty">Rien à l'agenda pour demain.</p>`; }
-
-            html += `<div class="day-title" style="margin-top: 25px;">À venir (${jourApresDemain})</div>`;
-            const prioApresDemain = prioritesSemaine[jourApresDemain];
-            if (prioApresDemain && prioApresDemain.length > 0) {
-                prioApresDemain.forEach(p => { html += `<div class="priority-item priority-item-future">${p}</div>`; });
-            } else { html += `<p class="priority-empty" style="margin-bottom:0;">Rien à l'agenda pour le moment.</p>`; }
-
-            conteneur.innerHTML = html;
-        }
-    }
-
-    function afficherErreurChargement() {
-        const conteneur = document.getElementById('prioritesContainer');
-        conteneur.innerHTML = `
-            <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px;">
-                <strong>⚠️ Fichier "studio.js" non trouvé.</strong><br><br>
-                Assurez-vous qu'il se trouve dans le même dossier sur Glitch ou SharePoint.
-            </div>
-        `;
-    }
-
-    // --- MOTEUR DE RECHERCHE ---
-    function enleverAccents(texte) { return texte.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
-
-    const motsClesFestivals = [
-        "festival d'été de québec", "festival d'ete de quebec", "feq", 
-        "lasso", "osheaga", "festivoix", "festi voix",
-        "lac des nations", "amphithéâtre", "amphitheatre"
-    ];
-
-    function recherche() {
-        const inputBrut = document.getElementById('searchBar').value.toLowerCase().trim();
-        const inputNettoye = enleverAccents(inputBrut);
-        const resultDiv = document.getElementById('resultArea');
-        
-        if (inputNettoye.length < 2) { 
-            resultDiv.style.display = 'none';
-            resultDiv.innerHTML = "";
-            return; 
+    <script>
+        function verifierMdp() {
+            if(document.getElementById('pwd').value === 'Toujoursunhit2026') {
+                document.getElementById('ecran-mdp').style.display = 'none';
+                document.getElementById('contenu-principal').style.display = 'block';
+                afficherTout();
+            } else {
+                alert('Mot de passe incorrect');
+            }
         }
 
-        if (typeof baseDeDonnees === 'undefined') {
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `<p style="color:red; font-weight:bold;">Impossible de chercher. Le fichier <em>studio.js</em> manque.</p>`;
-            return;
-        }
-
-        resultDiv.style.display = 'block';
-        const artisteTrouve = baseDeDonnees.find(a => enleverAccents(a.nom.toLowerCase()).includes(inputNettoye));
-
-        if (artisteTrouve) {
-            let html = `<div class="artist-name">${artisteTrouve.nom}</div>`;
-            
-            let showsReguliers = [];
-            let showsMajeurs = [];
-
-            if (artisteTrouve.majeurs) showsMajeurs = [...artisteTrouve.majeurs];
-
-            if (artisteTrouve.prochains) {
-                artisteTrouve.prochains.forEach(show => {
-                    let nomSalleClean = enleverAccents(show.salle.toLowerCase());
-                    let estUnFestival = motsClesFestivals.some(mot => nomSalleClean.includes(mot));
-                    if (estUnFestival) showsMajeurs.push(show);
-                    else showsReguliers.push(show);
+        function afficherTout() {
+            // Affichage Priorités
+            const ulPri = document.getElementById('liste-priorites');
+            if (typeof mesPriorites !== 'undefined') {
+                mesPriorites.forEach(p => {
+                    let li = document.createElement('li');
+                    li.textContent = p;
+                    ulPri.appendChild(li);
                 });
-            }
-            
-            if (showsReguliers.length > 0) {
-                html += `<div class="section-title">📅 Prochains spectacles</div>`;
-                showsReguliers.forEach(show => { html += `<div class="show-card"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; });
-            } else if (showsMajeurs.length === 0) {
-                html += `<p style="color:#666; font-style:italic; margin-bottom: 20px;">Aucune date locale confirmée au système.</p>`;
-            }
+            } else { ulPri.innerHTML = "<li>Fichier priorites.js manquant.</li>"; }
 
-            if (showsMajeurs.length > 0) {
-                html += `<div class="section-title">⭐ Événements majeurs</div>`;
-                showsMajeurs.forEach(show => { html += `<div class="show-card highlight"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; });
-            }
-
-            const nomPourTicketmaster = encodeURIComponent(enleverAccents(artisteTrouve.nom));
-            const nomPourGoogle = encodeURIComponent(artisteTrouve.nom);
-            
-            html += `
-                <div class="btn-container">
-                    <a href="https://www.ticketmaster.ca/search?q=${nomPourTicketmaster}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets Ticketmaster</a>
-                    <a href="https://www.google.com/search?q=billets+spectacle+${nomPourGoogle}+Montréal+Québec" target="_blank" class="btn-action btn-google">🔍 Recherche Google</a>
-                </div>
-            `;
-            resultDiv.innerHTML = html;
-        } else {
-            resultDiv.innerHTML = `<div class="search-error-msg">Aucun artiste ne correspond à "${inputBrut}".</div>`;
+            // Affichage Spectacles
+            const divSpec = document.getElementById('liste-spectacles');
+            if (typeof mesSpectacles !== 'undefined') {
+                for (const [mois, shows] of Object.entries(mesSpectacles)) {
+                    let divMois = document.createElement('div');
+                    divMois.innerHTML = `<h3>${mois}</h3>`;
+                    let ul = document.createElement('ul');
+                    shows.forEach(s => {
+                        let li = document.createElement('li');
+                        li.textContent = s;
+                        ul.appendChild(li);
+                    });
+                    divMois.appendChild(ul);
+                    divSpec.appendChild(divMois);
+                }
+            } else { divSpec.innerHTML = "<p>Fichier spectacles.js manquant.</p>"; }
         }
-    }
-</script>
-
+    </script>
 </body>
 </html>
