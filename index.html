@@ -7,58 +7,46 @@
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eef2f5; padding: 20px; margin: 0; color: #333; }
         
-        /* --- ÉCRAN DE CONNEXION --- */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #d32f2f; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: 0.5s; }
         #login-screen img { max-height: 80px; margin-bottom: 20px; }
         .login-box { background: rgba(0,0,0,0.1); padding: 40px; border-radius: 15px; text-align: center; }
         .login-box h2 { margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
-        #passInput { width: 100%; padding: 15px; font-size: 18px; margin-top: 20px; border: none; border-radius: 8px; box-sizing: border-box; text-align: center; outline: none; }
-        #btnEntrer { margin-top: 20px; padding: 12px 30px; font-size: 16px; font-weight: bold; color: #d32f2f; background: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-        #btnEntrer:hover { transform: scale(1.05); }
+        #passInput { width: 100%; padding: 15px; font-size: 18px; margin-top: 20px; border: none; border-radius: 8px; text-align: center; outline: none; }
+        #btnEntrer { margin-top: 20px; padding: 12px 30px; font-size: 16px; font-weight: bold; color: #d32f2f; background: white; border: none; border-radius: 8px; cursor: pointer; }
 
-        /* --- CONTENU PRINCIPAL --- */
         #main-content { display: none; max-width: 1200px; margin: 0 auto; }
         .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; background: white; padding: 15px 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .header img { height: 40px; }
         .header h1 { margin: 0; font-size: 24px; color: #d32f2f; }
 
-        /* --- LAYOUT COLONNES --- */
         .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
 
-        /* --- PRIORITÉS (GAUCHE) --- */
         .priorities-panel { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid #d32f2f; }
-        .priorities-panel h2 { margin-top: 0; color: #333; display: flex; align-items: center; gap: 10px; font-size: 20px; }
+        .priorities-panel h2 { margin-top: 0; color: #333; font-size: 20px; }
         .priority-list { list-style: none; padding: 0; margin: 0; }
         .priority-list li { background: #fdf2f2; padding: 15px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid #d32f2f; font-size: 15px; line-height: 1.4; }
 
-        /* --- RECHERCHE (DROITE) --- */
         .search-panel { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .search-panel h2 { margin-top: 0; color: #333; font-size: 20px; }
-        #searchInput { width: 100%; padding: 15px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.2s; margin-bottom: 20px; }
-        #searchInput:focus { border-color: #d32f2f; }
+        #searchInput { width: 100%; padding: 15px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; outline: none; margin-bottom: 20px; }
         
         .result-box { padding: 20px; border-radius: 8px; background: #f9f9f9; min-height: 100px; }
         .result-box h3 { margin-top: 0; color: #d32f2f; font-size: 22px; }
-        
-        .section-title { font-weight: bold; color: #555; margin: 15px 0 5px 0; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        .section-title { font-weight: bold; color: #555; margin: 15px 0 5px 0; text-transform: uppercase; font-size: 12px; }
         
         .show-card { background: white; padding: 12px; border-radius: 6px; border: 1px solid #eee; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .show-card.highlight { border-left: 4px solid #ff9800; background: #fffcf5; }
         .show-date { font-weight: bold; color: #333; }
         .show-venue { color: #666; font-size: 14px; }
 
-        /* --- INFO ARTISTE (NOUVEAU) --- */
         .info-card { background: #e3f2fd; padding: 12px; border-radius: 6px; border-left: 4px solid #2196f3; margin-bottom: 15px; font-size: 14px; color: #0d47a1; }
 
         .btn-container { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-action { flex: 1; padding: 12px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.2s; }
+        .btn-action { flex: 1; padding: 12px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; }
         .btn-ticketmaster { background: #026cdf; color: white; }
         .btn-google { background: #fff; color: #333; border: 1px solid #ddd; }
-        .btn-action:hover { opacity: 0.9; }
-
-        @media (max-width: 768px) {
-            .grid-container { grid-template-columns: 1fr; }
-        }
+        
+        @media (max-width: 768px) { .grid-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -79,62 +67,51 @@
         </div>
 
         <div class="grid-container">
-            
             <div class="priorities-panel">
                 <h2>📌 Priorités de la semaine</h2>
-                <ul class="priority-list" id="priorityContainer">
-                    </ul>
+                <ul class="priority-list" id="priorityContainer"></ul>
             </div>
 
             <div class="search-panel">
                 <h2>🔍 Recherche Artiste</h2>
-                <input type="text" id="searchInput" placeholder="Tapez un nom d'artiste (ex: Charlotte Cardin)..." autocomplete="off">
-                
+                <input type="text" id="searchInput" placeholder="Tapez un nom d'artiste..." autocomplete="off">
                 <div class="result-box" id="resultContainer">
                     <p style="color:#888; text-align:center; margin-top:40px;">Commencez à taper un nom pour voir les infos et les spectacles.</p>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <script src="studio.js"></script>
+    <script src="spectacles.js"></script>
+    
     <script>
-        // --- GESTION DU MOT DE PASSE ---
         const PWD = "Toujoursunhit2026";
         const input = document.getElementById("passInput");
         
-        input.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") checkPassword();
-        });
+        input.addEventListener("keypress", function(event) { if (event.key === "Enter") checkPassword(); });
 
         function checkPassword() {
             if(input.value === PWD) {
-                document.getElementById('login-screen').style.opacity = "0";
-                setTimeout(() => {
-                    document.getElementById('login-screen').style.display = "none";
-                    document.getElementById('main-content').style.display = "block";
-                    chargerPriorites(); // Charge les priorités de la semaine
-                }, 500);
+                document.getElementById('login-screen').style.display = "none";
+                document.getElementById('main-content').style.display = "block";
+                chargerPriorites();
             } else {
-                input.style.border = "2px solid white";
-                input.style.backgroundColor = "#ffcdd2";
-                setTimeout(() => { input.style.border = "none"; input.style.backgroundColor = "white"; input.value = ""; }, 1000);
+                alert("Mot de passe incorrect");
             }
         }
 
-        // --- GESTION DES PRIORITÉS ---
         function chargerPriorites() {
             const container = document.getElementById('priorityContainer');
             container.innerHTML = "";
-            prioritesGenerales.forEach(texte => {
-                let li = document.createElement("li");
-                li.innerHTML = texte;
-                container.appendChild(li);
-            });
+            if (typeof prioritesGenerales !== 'undefined') {
+                prioritesGenerales.forEach(texte => {
+                    let li = document.createElement("li");
+                    li.innerHTML = texte;
+                    container.appendChild(li);
+                });
+            }
         }
 
-        // --- RECHERCHE ---
         function enleverAccents(str) {
             return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         }
@@ -144,16 +121,17 @@
             const resultDiv = document.getElementById('resultContainer');
             
             if (query.length < 2) {
-                resultDiv.innerHTML = `<p style="color:#888; text-align:center; margin-top:40px;">Commencez à taper un nom pour voir les spectacles.</p>`;
+                resultDiv.innerHTML = `<p style="color:#888; text-align:center; margin-top:40px;">Commencez à taper un nom...</p>`;
                 return;
             }
+
+            if (typeof baseArtistes === 'undefined') return;
 
             const artisteTrouve = baseArtistes.find(a => enleverAccents(a.nom).includes(query));
 
             if (artisteTrouve) {
                 let html = `<h3>${artisteTrouve.nom}</h3>`;
                 
-                // NOUVEAU : Affichage des infos/potins s'il y en a
                 if (artisteTrouve.info && artisteTrouve.info.trim() !== "") {
                     html += `<div class="info-card">🎙️ <b>Info Rouge :</b> ${artisteTrouve.info}</div>`;
                 }
@@ -162,7 +140,7 @@
                 const showsMajeurs = artisteTrouve.majeurs || [];
 
                 if (showsLocaux.length > 0) {
-                    html += `<div class="section-title">📍 En région</div>`;
+                    html += `<div class="section-title">📍 En région / Locaux</div>`;
                     showsLocaux.forEach(show => { html += `<div class="show-card"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; });
                 } else if (showsMajeurs.length === 0) {
                     html += `<p style="color:#666; font-style:italic; margin-bottom: 20px;">Aucune date confirmée au système.</p>`;
