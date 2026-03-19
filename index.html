@@ -6,15 +6,31 @@
     <title>Studio Rouge FM</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        
+        /* Écran Mot de Passe */
         #ecran-mdp { background-color: #d32f2f; color: white; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        #ecran-mdp input { padding: 10px; font-size: 16px; margin: 10px; text-align: center; }
-        #ecran-mdp button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: white; color: #d32f2f; border: none; font-weight: bold; }
-        #contenu-principal { display: none; padding: 20px; max-width: 800px; margin: auto; background: white; min-height: 100vh; }
-        .boite-priorites { background: #ffebee; border-left: 5px solid #d32f2f; padding: 15px; margin-bottom: 30px; }
-        .boite-priorites h2 { color: #b71c1c; margin-top: 0; }
-        .boite-priorites li { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; }
-        .boite-spectacles h3 { color: #d32f2f; margin-bottom: 5px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-        .boite-spectacles li { margin-bottom: 5px; }
+        #ecran-mdp input { padding: 10px; font-size: 16px; margin: 10px; text-align: center; border-radius: 5px; border: none; }
+        #ecran-mdp button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: white; color: #d32f2f; border: none; font-weight: bold; border-radius: 5px; }
+        
+        /* Structure de l'outil */
+        #contenu-principal { display: none; padding: 20px; max-width: 1200px; margin: auto; }
+        .entete { text-align: center; margin-bottom: 20px; color: #d32f2f; }
+        .container { display: flex; gap: 20px; }
+        
+        /* Colonne de Gauche (Priorités) */
+        .colonne-gauche { flex: 1; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .priorite-item { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; font-size: 1.1em; }
+        
+        /* Colonne de Droite (Spectacles) */
+        .colonne-droite { flex: 1; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        #barre-recherche { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .spectacle-mois { margin-bottom: 20px; }
+        .spectacle-mois h3 { color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; }
+        .spectacle-item { padding: 5px 0; font-size: 1.05em; }
+        .spectacle-item strong { color: #333; }
+        
+        /* Cacher la liste de spectacles si recherche vide */
+        .cacher { display: none; }
     </style>
 </head>
 <body>
@@ -26,16 +42,20 @@
     </div>
 
     <div id="contenu-principal">
-        <h1 style="text-align: center;">Outil Animateurs - Rouge FM</h1>
-        
-        <div class="boite-priorites">
-            <h2>🔥 Priorités du Jour</h2>
-            <ul id="liste-priorites"></ul>
-        </div>
+        <h1 class="entete">Outil Animateurs - Rouge FM</h1>
+        <div class="container">
+            
+            <div class="colonne-gauche">
+                <h2 style="color:#d32f2f;">🔥 Priorités du Jour</h2>
+                <div id="liste-priorites"></div>
+            </div>
 
-        <div class="boite-spectacles">
-            <h2>📅 Calendrier des Spectacles 2026</h2>
-            <div id="liste-spectacles"></div>
+            <div class="colonne-droite">
+                <h2 style="color:#d32f2f;">📅 Recherche de Spectacles</h2>
+                <input type="text" id="barre-recherche" placeholder="Rechercher un artiste, une salle, une ville..." onkeyup="filtrerSpectacles()">
+                <div id="liste-spectacles"></div>
+            </div>
+
         </div>
     </div>
 
@@ -47,39 +67,87 @@
             if(document.getElementById('pwd').value === 'Toujoursunhit2026') {
                 document.getElementById('ecran-mdp').style.display = 'none';
                 document.getElementById('contenu-principal').style.display = 'block';
-                afficherTout();
+                chargerPriorites();
+                chargerSpectacles();
             } else {
                 alert('Mot de passe incorrect');
             }
         }
 
-        function afficherTout() {
-            // Affichage Priorités
-            const ulPri = document.getElementById('liste-priorites');
+        function chargerPriorites() {
+            const divPri = document.getElementById('liste-priorites');
+            divPri.innerHTML = '';
             if (typeof mesPriorites !== 'undefined') {
                 mesPriorites.forEach(p => {
-                    let li = document.createElement('li');
-                    li.textContent = p;
-                    ulPri.appendChild(li);
+                    let div = document.createElement('div');
+                    div.className = 'priorite-item';
+                    div.innerHTML = p;
+                    divPri.appendChild(div);
                 });
-            } else { ulPri.innerHTML = "<li>Fichier priorites.js manquant.</li>"; }
+            } else { divPri.innerHTML = "<p>Erreur: Fichier priorites.js introuvable.</p>"; }
+        }
 
-            // Affichage Spectacles
+        function chargerSpectacles() {
             const divSpec = document.getElementById('liste-spectacles');
-            if (typeof mesSpectacles !== 'undefined') {
-                for (const [mois, shows] of Object.entries(mesSpectacles)) {
+            divSpec.innerHTML = '';
+            if (typeof tousLesSpectacles !== 'undefined') {
+                for (const [mois, shows] of Object.entries(tousLesSpectacles)) {
                     let divMois = document.createElement('div');
+                    divMois.className = 'spectacle-mois cacher'; // Caché par défaut
                     divMois.innerHTML = `<h3>${mois}</h3>`;
                     let ul = document.createElement('ul');
+                    
                     shows.forEach(s => {
                         let li = document.createElement('li');
-                        li.textContent = s;
+                        li.className = 'spectacle-item cacher'; // Caché par défaut
+                        li.innerHTML = s;
                         ul.appendChild(li);
                     });
+                    
                     divMois.appendChild(ul);
                     divSpec.appendChild(divMois);
                 }
-            } else { divSpec.innerHTML = "<p>Fichier spectacles.js manquant.</p>"; }
+            } else { divSpec.innerHTML = "<p>Erreur: Fichier spectacles.js introuvable.</p>"; }
+        }
+
+        function filtrerSpectacles() {
+            let input = document.getElementById('barre-recherche').value.toLowerCase();
+            let divSpec = document.getElementById('liste-spectacles');
+            let moisDivs = divSpec.getElementsByClassName('spectacle-mois');
+
+            // Si la barre est vide, on cache tout
+            if(input.trim() === "") {
+                for (let i = 0; i < moisDivs.length; i++) {
+                    moisDivs[i].classList.add('cacher');
+                    let items = moisDivs[i].getElementsByClassName('spectacle-item');
+                    for (let j = 0; j < items.length; j++) {
+                        items[j].classList.add('cacher');
+                    }
+                }
+                return;
+            }
+
+            // Sinon, on cherche
+            for (let i = 0; i < moisDivs.length; i++) {
+                let items = moisDivs[i].getElementsByClassName('spectacle-item');
+                let moisAUnResultat = false;
+                
+                for (let j = 0; j < items.length; j++) {
+                    let texteItem = items[j].textContent || items[j].innerText;
+                    if (texteItem.toLowerCase().indexOf(input) > -1) {
+                        items[j].classList.remove('cacher');
+                        moisAUnResultat = true;
+                    } else {
+                        items[j].classList.add('cacher');
+                    }
+                }
+                
+                if (moisAUnResultat) {
+                    moisDivs[i].classList.remove('cacher');
+                } else {
+                    moisDivs[i].classList.add('cacher');
+                }
+            }
         }
     </script>
 </body>
