@@ -22,12 +22,12 @@
         
         /* --- COLONNE GAUCHE (Priorités d'antenne - fond rouge) --- */
         .priorities-panel { flex: 1 1 350px; background: #d32f2f; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(211,47,47,0.3); color: white;}
-        .priority-main-title { font-size: 1.4em; font-weight: 900; margin-top: 0; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px;}
+        .priority-main-title { font-size: 1.4em; font-weight: 900; margin-top: 0; margin-bottom: 25px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px;}
         
-        .day-title { font-size: 1.1em; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;}
+        .day-title { font-size: 1em; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #fff; }
         
-        .priority-item { background: rgba(255,255,255,0.1); padding: 15px; margin-bottom: 15px; border-radius: 8px; font-size: 1.05em; font-weight: 600; line-height: 1.4; border-left: 4px solid #fff;}
-        .priority-item-future { background: rgba(255,255,255,0.05); border-left-color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.85); font-size: 0.95em;}
+        .priority-item { background: rgba(255,255,255,0.15); padding: 15px; margin-bottom: 12px; border-radius: 8px; font-size: 1.05em; font-weight: 600; line-height: 1.4; border: none;}
+        .priority-item-future { background: rgba(255,255,255,0.15); color: #fff; font-size: 1.05em;}
         
         .priority-empty { font-style: italic; opacity: 0.8; margin-bottom: 20px;}
 
@@ -36,15 +36,14 @@
         
         /* Boîte de recherche */
         .search-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 5px; justify-content: center;}
-        .header-top img { max-height: 45px; }
-        h1 { color: #111; margin: 0; font-size: 1.8em; text-transform: uppercase; font-weight: 900; letter-spacing: -0.5px;}
+        .header-top { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-bottom: 5px; justify-content: center;}
+        h1 { color: #000; margin: 0; font-size: 1.8em; text-transform: uppercase; font-weight: 900; letter-spacing: -0.5px; text-align: center;}
         
         .slogan { color: #d32f2f; font-weight: bold; font-style: italic; font-size: 1.1em; margin-top: 5px; margin-bottom: 5px; text-align: center; }
-        .ia-warning { font-size: 0.85em; color: #888; font-style: italic; text-align: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-top: 0; margin-bottom: 25px; }
+        .ia-warning { font-size: 0.85em; color: #888; font-style: italic; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 0; margin-bottom: 25px; }
 
-        input#searchBar { width: 100%; padding: 18px; font-size: 18px; border: 2px solid #ddd; border-radius: 30px; outline: none; box-sizing: border-box; transition: 0.3s; background-color: #fafafa; margin-bottom: 10px;}
-        input#searchBar:focus { border-color: #d32f2f; background-color: #fff; box-shadow: 0 0 10px rgba(211,47,47,0.1); }
+        input#searchBar { width: 100%; padding: 15px 25px; font-size: 16px; border: 2px solid #e0e0e0; border-radius: 50px; outline: none; box-sizing: border-box; transition: 0.3s; background-color: #fff; margin-bottom: 10px;}
+        input#searchBar:focus { border-color: #d32f2f; box-shadow: 0 0 10px rgba(211,47,47,0.1); }
         
         #resultArea { text-align: left; background: #fdfdfd; padding: 20px; border-radius: 10px; border: 1px solid #eee; display: none; margin-top: 15px; }
         .artist-name { font-size: 1.8em; font-weight: 900; color: #111; border-bottom: 4px solid #d32f2f; margin-bottom: 20px; padding-bottom: 8px; text-transform: uppercase; margin-top: 0;}
@@ -66,15 +65,15 @@
 
         /* Boîte des Gros Shows */
         .shows-box { background: white; padding: 25px 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .box-title { font-size: 1.3em; font-weight: 900; color: #111; border-bottom: 2px solid #222; margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; text-transform: uppercase;}
+        .box-title { font-size: 1.3em; font-weight: 900; color: #000; border-bottom: 1px solid #000; margin-top: 0; margin-bottom: 20px; padding-bottom: 10px; text-transform: uppercase;}
         
-        .grid-shows { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+        .grid-shows { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .auto-card { background: #f9f9f9; padding: 15px; border-radius: 8px; border-left: 4px solid #d32f2f;}
         .auto-card.bell { border-left-color: #fbc02d; background: #fffde7; }
-        .auto-artist { font-weight: 900; color: #222; font-size: 1.1em; margin-bottom: 5px; text-transform: uppercase;}
+        .auto-artist { font-weight: 900; color: #000; font-size: 1.1em; margin-bottom: 5px; text-transform: uppercase;}
         .auto-date { font-weight: 700; color: #d32f2f; font-size: 0.9em; }
         .auto-card.bell .auto-date { color: #f57f17; }
-        .auto-venue { font-size: 0.85em; color: #666; margin-top: 4px;}
+        .auto-venue { font-size: 0.85em; color: #888; margin-top: 4px;}
         
         /* Bulle d'info artiste (ajoutée depuis le nouveau code) */
         .info-bulle { display: inline-block; background: #e3f2fd; color: #0d47a1; font-size: 14px; padding: 8px 12px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; border-left: 4px solid #2196f3; }
@@ -105,7 +104,6 @@
         
         <div class="search-box">
             <div class="header-top">
-                <img src="https://upload.wikimedia.org/wikipedia/fr/a/a2/Rouge_FM_%28logo%29.svg" alt="Rouge FM" onerror="this.style.display='none'">
                 <h1>Calendrier des spectacles</h1>
             </div>
             <p class="slogan">Toujours un hit</p>
