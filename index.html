@@ -7,6 +7,7 @@
     <style>
         :root {
             --rouge-rouge: #d32f2f;
+            --bleu-info: #1976d2;
             --fond-gris: #eef2f5;
         }
 
@@ -33,67 +34,65 @@
         #btnEntrer { background: white; color: var(--rouge-rouge); border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.2s;}
         #btnEntrer:hover { background: #f0f0f0; transform: scale(1.02); }
 
-        /* --- SIDEBAR GAUCHE (PRIORITÉS) --- */
+        /* --- BARRES LATÉRALES (SIDEBARS) --- */
         .sidebar { 
-            width: 350px; 
-            background: var(--rouge-rouge); 
+            width: 320px; 
             color: white; 
             padding: 30px; 
             box-sizing: border-box;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
         }
-        .priority-main-title { 
-            font-size: 1.4em; font-weight: 900; text-transform: uppercase; 
+        .sidebar-left { background: var(--rouge-rouge); }
+        .sidebar-right { background: var(--bleu-info); }
+
+        .side-title { 
+            font-size: 1.3em; font-weight: 900; text-transform: uppercase; 
             border-bottom: 2px solid rgba(255,255,255,0.3); 
             padding-bottom: 15px; margin-bottom: 25px;
             display: flex; align-items: center; gap: 10px;
         }
-        .day-title { font-size: 1em; font-weight: 900; text-transform: uppercase; margin-top: 30px; margin-bottom: 15px; }
-        .day-title:first-of-type { margin-top: 0; }
-        .priority-item { 
+        
+        .day-group-title { 
+            font-size: 0.9em; font-weight: 900; text-transform: uppercase; 
+            margin-top: 30px; margin-bottom: 12px; 
+            opacity: 0.9;
+        }
+        .day-group-title:first-of-type { margin-top: 0; }
+
+        .side-item { 
             background: rgba(255,255,255,0.15); 
-            padding: 15px; margin-bottom: 12px; 
-            border-radius: 10px; font-size: 1.05em; font-weight: 600; line-height: 1.4; 
+            padding: 15px; margin-bottom: 10px; 
+            border-radius: 10px; font-size: 1em; font-weight: 600; line-height: 1.4; 
         }
 
-        /* --- CONTENU DROITE --- */
+        /* --- CONTENU CENTRAL --- */
         .main-content { 
             flex: 1; 
-            padding: 40px; 
+            padding: 30px; 
             display: flex; 
             flex-direction: column; 
             gap: 25px;
-            max-width: 1100px;
+            min-width: 500px;
         }
 
         .white-card { 
             background: white; 
-            padding: 35px; 
+            padding: 30px; 
             border-radius: 20px; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
         }
 
-        /* JOURNÉES MONDIALES (STYLE SPÉCIAL) */
-        .world-day-item {
-            background: #f0f7ff;
-            color: #0d47a1;
-            padding: 12px 18px;
-            margin-bottom: 8px;
-            border-radius: 10px;
-            font-weight: 600;
-            border-left: 5px solid #2196f3;
-            font-size: 0.95em;
-        }
-
         /* RECHERCHE */
-        .search-header { text-align: center; margin-bottom: 25px; }
-        .search-header h1 { font-size: 2em; font-weight: 900; text-transform: uppercase; margin: 0; color: #000; }
+        .search-header { text-align: center; margin-bottom: 20px; }
+        .search-header h1 { font-size: 1.8em; font-weight: 900; text-transform: uppercase; margin: 0; color: #000; }
         .search-header .slogan { color: var(--rouge-rouge); font-weight: bold; font-style: italic; font-size: 1.1em; margin: 5px 0; }
-        .ia-warning { font-size: 0.85em; color: #999; font-style: italic; }
+        .ia-warning { font-size: 0.8em; color: #999; font-style: italic; }
 
         input#searchBar { 
-            width: 100%; padding: 18px 30px; font-size: 17px; 
+            width: 100%; padding: 16px 25px; font-size: 16px; 
             border: 2px solid #f0f0f0; border-radius: 50px; 
             outline: none; box-sizing: border-box; background: #fafafa;
             transition: 0.2s;
@@ -102,27 +101,27 @@
 
         /* RÉSULTATS */
         #resultArea { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; display: none; }
-        .artist-title { font-size: 2em; font-weight: 900; text-transform: uppercase; border-bottom: 5px solid var(--rouge-rouge); padding-bottom: 8px; margin-bottom: 20px; }
-        .section-label { font-size: 0.85em; text-transform: uppercase; color: #888; font-weight: 800; margin: 20px 0 10px 0; border-left: 4px solid var(--rouge-rouge); padding-left: 10px; }
+        .artist-title { font-size: 1.8em; font-weight: 900; text-transform: uppercase; border-bottom: 5px solid var(--rouge-rouge); padding-bottom: 8px; margin-bottom: 15px; }
+        .section-label { font-size: 0.8em; text-transform: uppercase; color: #888; font-weight: 800; margin: 15px 0 10px 0; border-left: 4px solid var(--rouge-rouge); padding-left: 10px; }
 
-        /* GRILLE */
-        .grid-shows { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+        /* GRILLE SPECTACLES */
+        .grid-shows { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; margin-top: 15px; }
         .card { 
-            background: #fcfcfc; padding: 18px; border-radius: 12px; 
+            background: #fcfcfc; padding: 15px; border-radius: 12px; 
             border: 1px solid #f0f0f0; border-left: 6px solid var(--rouge-rouge); 
             display: flex; flex-direction: column; gap: 4px;
         }
         .card.bell { border-left-color: #fbc02d; background: #fffdf2; }
-        .card-artist { font-weight: 900; font-size: 1.1em; text-transform: uppercase; color: #000; }
-        .card-date { font-weight: 700; color: var(--rouge-rouge); font-size: 0.95em; }
+        .card-artist { font-weight: 900; font-size: 1.05em; text-transform: uppercase; color: #000; }
+        .card-date { font-weight: 700; color: var(--rouge-rouge); font-size: 0.9em; }
         .card.bell .card-date { color: #ef6c00; }
-        .card-venue { font-size: 0.85em; color: #666; }
+        .card-venue { font-size: 0.8em; color: #666; }
 
-        /* BOUTONS */
-        .btn-row { display: flex; gap: 10px; margin-top: 25px; }
+        /* BOUTONS ACTIONS */
+        .btn-row { display: flex; gap: 8px; margin-top: 20px; }
         .btn { 
-            flex: 1; padding: 12px; text-align: center; border-radius: 10px; 
-            text-decoration: none; font-weight: 800; font-size: 0.9em; 
+            flex: 1; padding: 10px; text-align: center; border-radius: 10px; 
+            text-decoration: none; font-weight: 800; font-size: 0.85em; 
             transition: 0.2s; border: 2px solid transparent; 
         }
         .btn-ticket { border-color: var(--rouge-rouge); color: var(--rouge-rouge); }
@@ -130,11 +129,10 @@
         .btn-google { background: #4285F4; color: white; }
         .btn-news { background: #f1f3f4; color: #3c4043; border-color: #dadce0; }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1200px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; }
-            .grid-shows { grid-template-columns: 1fr; }
-            .btn-row { flex-direction: column; }
+            .main-content { min-width: auto; }
         }
     </style>
 </head>
@@ -148,24 +146,14 @@
     </div>
 </div>
 
-<div class="sidebar">
-    <h2 class="priority-main-title">🎙️ Priorités Rouge</h2>
+<!-- BARRE LATÉRALE GAUCHE : PRIORITÉS -->
+<div class="sidebar sidebar-left">
+    <h2 class="side-title">🎙️ Priorités</h2>
     <div id="prioritesContainer"></div>
 </div>
 
+<!-- CONTENU CENTRAL -->
 <div class="main-content">
-    
-    <!-- NOUVELLE SECTION : JOURNÉES MONDIALES -->
-    <div class="white-card">
-        <h2 style="text-transform: uppercase; font-weight: 900; margin: 0; font-size: 1.1em; display: flex; align-items: center; gap: 10px;">
-            🌍 Journées Internationales
-        </h2>
-        <div style="height: 1px; background: #eee; margin: 15px 0;"></div>
-        <div id="journeesContainer" style="display: flex; flex-direction: column; gap: 10px;">
-            <!-- Rempli par journees.js -->
-        </div>
-    </div>
-
     <div class="white-card">
         <div class="search-header">
             <h1>Calendrier des spectacles</h1>
@@ -177,12 +165,18 @@
     </div>
 
     <div class="white-card">
-        <h2 style="text-transform: uppercase; font-weight: 900; margin: 0; font-size: 1.2em; display: flex; align-items: center; gap: 10px;">
-            🎟️ Gros événements à venir
+        <h2 style="text-transform: uppercase; font-weight: 900; margin: 0; font-size: 1.1em; display: flex; align-items: center; gap: 10px;">
+            🎟️ Événements à venir
         </h2>
         <div style="height: 1px; background: #eee; margin: 15px 0;"></div>
         <div class="grid-shows" id="homeGrid"></div>
     </div>
+</div>
+
+<!-- BARRE LATÉRALE DROITE : JOURNÉES -->
+<div class="sidebar sidebar-right">
+    <h2 class="side-title">🌍 Journées</h2>
+    <div id="journeesContainer"></div>
 </div>
 
 <script src="priorites.js"></script>
@@ -208,7 +202,7 @@
     }
 
     function attendreEtInitialiser() {
-        if (typeof baseDeDonnees !== 'undefined' && typeof prioritesSemaine !== 'undefined') {
+        if (typeof baseDeDonnees !== 'undefined' && typeof prioritesSemaine !== 'undefined' && typeof journeesMondiales !== 'undefined') {
             initialiserContenu();
         } else {
             setTimeout(attendreEtInitialiser, 50);
@@ -240,33 +234,35 @@
         const sequence = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
         const labels = ["Aujourd'hui", "Demain", "À venir"];
 
-        // 1. Priorités (Sidebar)
+        // 1. Priorités (Sidebar Gauche)
         const contPrio = document.getElementById('prioritesContainer');
         if (typeof prioritesSemaine !== 'undefined') {
             let htmlP = "";
             sequence.forEach((idx, i) => {
                 const nomJ = jours[idx];
-                htmlP += `<div class="day-title">${labels[i]} (${nomJ.toUpperCase()})</div>`;
+                htmlP += `<div class="day-group-title">${labels[i]} (${nomJ.toUpperCase()})</div>`;
                 const list = prioritesSemaine[nomJ] || [];
-                if(list.length > 0) { list.forEach(p => htmlP += `<div class="priority-item">${p}</div>`); }
-                else { htmlP += `<p style="opacity:0.5; font-style:italic; font-size:0.9em;">Rien à l'agenda.</p>`; }
+                if(list.length > 0) { list.forEach(p => htmlP += `<div class="side-item">${p}</div>`); }
+                else { htmlP += `<p style="opacity:0.6; font-style:italic; font-size:0.85em;">Aucune priorité.</p>`; }
             });
             contPrio.innerHTML = htmlP;
         }
 
-        // 2. Journées Mondiales (Main Content)
+        // 2. Journées Mondiales (Sidebar Droite)
         const contJournees = document.getElementById('journeesContainer');
         if (typeof journeesMondiales !== 'undefined') {
             let htmlJ = "";
             sequence.forEach((idx, i) => {
                 const nomJ = jours[idx];
                 const list = journeesMondiales[nomJ] || [];
+                htmlJ += `<div class="day-group-title">${labels[i]} (${nomJ.toUpperCase()})</div>`;
                 if(list.length > 0) {
-                    htmlJ += `<div style="font-weight:900; font-size:0.8em; color:#666; text-transform:uppercase; margin-top:5px;">${labels[i]}</div>`;
-                    list.forEach(j => htmlJ += `<div class="world-day-item">${j}</div>`);
+                    list.forEach(j => htmlJ += `<div class="side-item">${j}</div>`);
+                } else {
+                    htmlJ += `<p style="opacity:0.6; font-style:italic; font-size:0.85em;">Rien de spécial.</p>`;
                 }
             });
-            contJournees.innerHTML = htmlJ || "<p style='color:#999'>Aucune journée spéciale répertoriée.</p>";
+            contJournees.innerHTML = htmlJ;
         }
 
         // 3. Grille d'accueil
@@ -331,7 +327,9 @@
                     <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA:fr" target="_blank" class="btn btn-news">📰 Actus</a>
                 </div>`;
             res.innerHTML = h;
-        } else { res.innerHTML = `<p style="text-align:center; color:var(--rouge-rouge); font-weight:bold; margin-top:20px;">Artiste non trouvé.</p>`; }
+        } else {
+            res.innerHTML = `<p style="text-align:center; color:var(--rouge-rouge); font-weight:bold; margin-top:20px;">Artiste non trouvé.</p>`;
+        }
     }
 </script>
 </body>
