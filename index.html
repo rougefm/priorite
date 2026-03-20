@@ -62,7 +62,7 @@
 
     <div id="main-content">
         <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Rouge_FM.svg" alt="Rouge FM">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Rouge_FM.svg" alt="Rouge FM" onerror="this.src='https://via.placeholder.com/150x50/ffffff/d32f2f?text=ROUGE'">
             <h1>Informations & Spectacles</h1>
         </div>
 
@@ -101,13 +101,13 @@
             }
         }
 
-        // --- DÉTECTION DU JOUR AUTOMATIQUE ---
         function chargerPriorites() {
             const container = document.getElementById('priorityContainer');
             container.innerHTML = "";
             
+            // Logique de détection du jour
             const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-            const jourActuel = jours[new Date().getDay()]; // Trouve le jour d'aujourd'hui
+            const jourActuel = jours[new Date().getDay()]; 
             
             document.getElementById('titre-priorites').innerText = "📌 Priorités du " + jourActuel;
 
@@ -135,9 +135,9 @@
                 return;
             }
 
-            if (typeof baseArtistes === 'undefined') return;
+            if (typeof baseDeDonnees === 'undefined') return;
 
-            const artisteTrouve = baseArtistes.find(a => enleverAccents(a.nom).includes(query));
+            const artisteTrouve = baseDeDonnees.find(a => enleverAccents(a.nom).includes(query));
 
             if (artisteTrouve) {
                 let html = `<h3>${artisteTrouve.nom}</h3>`;
@@ -166,8 +166,8 @@
                 
                 html += `
                     <div class="btn-container">
-                        <a href="https://www.ticketmaster.ca/search?q=${nomPourTicketmaster}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets Ticketmaster</a>
-                        <a href="https://www.google.com/search?q=billets+spectacle+${nomPourGoogle}+Montréal+Québec" target="_blank" class="btn-action btn-google">🔍 Recherche Google</a>
+                        <a href="https://www.ticketmaster.ca/search?q=${nomPourTicketmaster}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets</a>
+                        <a href="https://www.google.com/search?q=billets+spectacle+${nomPourGoogle}+Montréal+Québec" target="_blank" class="btn-action btn-google">🔍 Google</a>
                     </div>
                 `;
                 resultDiv.innerHTML = html;
