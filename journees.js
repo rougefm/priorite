@@ -1,22 +1,27 @@
 /**
  * journees.js
- * Base de données complète extraite du calendrier annuel.
- * Format de clé : "JJ-MM" pour une détection automatique par la date système.
+ * Base de données complète extraite du calendrier "Journees.xlsx".
+ * Format de clé : "JJ-MM" pour permettre un scan chronologique automatique.
  */
 const journeesMondiales = {
     // JANVIER
-    "01-01": ["Jour de l'An (Férié)"],
+    "01-01": ["Jour de l'An (Férié statutaire)"],
     "02-01": ["Journée de motivation et d’inspiration"],
     "03-01": ["Fête du sommeil"],
+    "04-01": ["Journée mondiale du braille"],
     "06-01": ["Journée des câlins"],
+    "13-01": ["Journée nationale de l'hypersensibilité"],
     "16-01": ["Journée pour ne rien faire du tout"],
-    "19-01": ["Blue Monday (Date mobile)"],
+    "19-01": ["Blue Monday (3e lundi de janvier)"],
     "20-01": ["Journée pour les amoureux du fromage"],
     "21-01": ["Journée internationale des pantalons de survêtement"],
+    "24-01": ["Journée internationale de l'éducation (UNESCO)"],
     "26-01": ["Fête des conjoints"],
 
     // FÉVRIER
-    "02-02": ["Semaine des enseignants (Début)"],
+    "01-02": ["Semaine des enseignants (Début)"],
+    "02-02": ["Journée de la marmotte / Journée mondiale des zones humides"],
+    "04-02": ["Journée mondiale contre le cancer"],
     "05-02": ["Journée mondiale du Nutella"],
     "13-02": ["Journée mondiale de la radio"],
     "14-02": ["Saint-Valentin"],
@@ -29,7 +34,7 @@ const journeesMondiales = {
     "20-03": ["Journée internationale de la Francophonie", "Journée mondiale du bonheur"],
     "21-03": ["Journée mondiale de la poésie"],
 
-    // AOÛT (Dates extraites de l'Excel)
+    // AOÛT
     "07-08": ["Journée mondiale de l’amitié", "Journée nationale des sœurs"],
     "15-08": ["Journée nationale de la relaxation"],
     "19-08": ["Journée mondiale de la photographie"],
@@ -47,20 +52,29 @@ const journeesMondiales = {
     "01-10": ["Journée internationale du café"],
     "05-10": ["Journée mondiale des profs"],
     "11-10": ["Journée internationale de la fille"],
-    "12-10": ["Action de grâce (Férié - Date mobile)"],
+    "12-10": ["Action de grâce (Férié)"],
     "25-10": ["Journée mondiale des pâtes"],
     "31-10": ["Halloween"],
 
     // NOVEMBRE
     "03-11": ["Journée de sensibilisation au stress"],
-    "11-11": ["Jour du Souvenir"],
-    "19-11": ["Journée internationale de l'homme"],
-    "20-11": ["Journée mondiale de l'enfance"],
+    "19-11": ["Journée internationale des hommes / Toilettes"],
+    "21-11": ["Journée mondiale de la télévision"],
+    "23-11": ["Journée de l’espresso"],
+    "25-11": ["Journée mondiale du jeu vidéo"],
+    "26-11": ["Journée sans achats / Gâteau / Maïs / Soie dentaire"],
+    "27-11": ["Black Friday (Date mobile)"],
+    "28-11": ["Journée du pain doré"],
+    "30-11": ["Cyber Monday (Date mobile)"],
 
     // DÉCEMBRE
-    "01-12": ["Journée mondiale de lutte contre le Sida"],
-    "08-12": ["Journée mondiale du climat"],
-    "21-12": ["Solstice d'hiver (Jour le plus court)"],
+    "03-12": ["Journée des cadres scolaires (AQCS)"],
+    "04-12": ["Jour du biscuit"],
+    "05-12": ["Journée mondiale du bénévolat / Volontaires"],
+    "07-12": ["Journée de la barbe à papa / Brownie"],
+    "09-12": ["Journée de la pâtisserie / Carte de Noël"],
+    "10-12": ["Journée des droits de l’homme / Bière blonde"],
+    "11-12": ["Journée Mange un bagel"],
     "24-12": ["Veille de Noël"],
     "25-12": ["Noël (Férié)"],
     "31-12": ["Veille du jour de l'An"]
