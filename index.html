@@ -18,7 +18,8 @@
             color: #333; 
             display: flex;
             min-height: 100vh;
-            overflow-x: hidden;
+            width: 100vw;
+            overflow-x: auto; /* Permet de scroller horizontalement si l'écran est trop petit */
         }
         
         /* --- ÉCRAN DE CONNEXION --- */
@@ -33,64 +34,68 @@
         #btnEntrer { background: white; color: var(--rouge-rouge); border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.2s;}
         #btnEntrer:hover { background: #f0f0f0; transform: scale(1.02); }
 
-        /* --- BARRES LATÉRALES (SIDEBARS UNIFIÉES EN ROUGE) --- */
+        /* --- BARRES LATÉRALES (SIDEBARS) --- */
         .sidebar { 
-            width: 320px; 
+            width: 300px; 
             background: var(--rouge-rouge); 
             color: white; 
-            padding: 30px; 
+            padding: 25px; 
             box-sizing: border-box;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            flex-shrink: 0;
+            flex-shrink: 0; /* EMPÊCHE LA COLONNE DE DISPARAÎTRE */
             display: flex;
             flex-direction: column;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
         }
 
         .side-title { 
-            font-size: 1.3em; font-weight: 900; text-transform: uppercase; 
+            font-size: 1.25em; font-weight: 900; text-transform: uppercase; 
             border-bottom: 2px solid rgba(255,255,255,0.3); 
-            padding-bottom: 15px; margin-bottom: 25px;
+            padding-bottom: 15px; margin-bottom: 20px;
             display: flex; align-items: center; gap: 10px;
         }
         
         .day-group-title { 
-            font-size: 0.9em; font-weight: 900; text-transform: uppercase; 
-            margin-top: 30px; margin-bottom: 12px; 
+            font-size: 0.85em; font-weight: 900; text-transform: uppercase; 
+            margin-top: 25px; margin-bottom: 10px; 
             opacity: 0.9;
         }
         .day-group-title:first-of-type { margin-top: 0; }
 
         .side-item { 
             background: rgba(255,255,255,0.15); 
-            padding: 15px; margin-bottom: 10px; 
-            border-radius: 10px; font-size: 1em; font-weight: 600; line-height: 1.4; 
+            padding: 12px; margin-bottom: 8px; 
+            border-radius: 8px; font-size: 0.95em; font-weight: 600; line-height: 1.4; 
         }
 
         /* --- CONTENU CENTRAL --- */
         .main-content { 
             flex: 1; 
-            padding: 30px; 
+            padding: 25px; 
             display: flex; 
             flex-direction: column; 
-            gap: 25px;
-            min-width: 500px;
+            gap: 20px;
+            min-width: 450px;
+            overflow-y: auto;
         }
 
         .white-card { 
             background: white; 
-            padding: 30px; 
-            border-radius: 20px; 
+            padding: 25px; 
+            border-radius: 15px; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
         }
 
         /* RECHERCHE */
-        .search-header { text-align: center; margin-bottom: 20px; }
-        .search-header h1 { font-size: 1.8em; font-weight: 900; text-transform: uppercase; margin: 0; color: #000; }
-        .search-header .slogan { color: var(--rouge-rouge); font-weight: bold; font-style: italic; font-size: 1.1em; margin: 5px 0; }
-        .ia-warning { font-size: 0.8em; color: #999; font-style: italic; }
-
+        .search-header { text-align: center; margin-bottom: 15px; }
+        .search-header h1 { font-size: 1.7em; font-weight: 900; text-transform: uppercase; margin: 0; color: #000; }
+        .search-header .slogan { color: var(--rouge-rouge); font-weight: bold; font-style: italic; font-size: 1em; margin: 3px 0; }
+        
         input#searchBar { 
-            width: 100%; padding: 16px 25px; font-size: 16px; 
+            width: 100%; padding: 15px 25px; font-size: 16px; 
             border: 2px solid #f0f0f0; border-radius: 50px; 
             outline: none; box-sizing: border-box; background: #fafafa;
             transition: 0.2s;
@@ -99,27 +104,27 @@
 
         /* RÉSULTATS */
         #resultArea { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; display: none; }
-        .artist-title { font-size: 1.8em; font-weight: 900; text-transform: uppercase; border-bottom: 5px solid var(--rouge-rouge); padding-bottom: 8px; margin-bottom: 15px; }
+        .artist-title { font-size: 1.7em; font-weight: 900; text-transform: uppercase; border-bottom: 5px solid var(--rouge-rouge); padding-bottom: 8px; margin-bottom: 15px; }
         .section-label { font-size: 0.8em; text-transform: uppercase; color: #888; font-weight: 800; margin: 15px 0 10px 0; border-left: 4px solid var(--rouge-rouge); padding-left: 10px; }
 
         /* GRILLE SPECTACLES */
-        .grid-shows { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; margin-top: 15px; }
+        .grid-shows { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
         .card { 
-            background: #fcfcfc; padding: 15px; border-radius: 12px; 
-            border: 1px solid #f0f0f0; border-left: 6px solid var(--rouge-rouge); 
-            display: flex; flex-direction: column; gap: 4px;
+            background: #fcfcfc; padding: 12px; border-radius: 10px; 
+            border: 1px solid #f0f0f0; border-left: 5px solid var(--rouge-rouge); 
+            display: flex; flex-direction: column; gap: 3px;
         }
         .card.bell { border-left-color: #fbc02d; background: #fffdf2; }
-        .card-artist { font-weight: 900; font-size: 1.05em; text-transform: uppercase; color: #000; }
-        .card-date { font-weight: 700; color: var(--rouge-rouge); font-size: 0.9em; }
+        .card-artist { font-weight: 900; font-size: 1em; text-transform: uppercase; color: #000; }
+        .card-date { font-weight: 700; color: var(--rouge-rouge); font-size: 0.85em; }
         .card.bell .card-date { color: #ef6c00; }
         .card-venue { font-size: 0.8em; color: #666; }
 
         /* BOUTONS ACTIONS */
         .btn-row { display: flex; gap: 8px; margin-top: 20px; }
         .btn { 
-            flex: 1; padding: 10px; text-align: center; border-radius: 10px; 
-            text-decoration: none; font-weight: 800; font-size: 0.85em; 
+            flex: 1; padding: 10px; text-align: center; border-radius: 8px; 
+            text-decoration: none; font-weight: 800; font-size: 0.8em; 
             transition: 0.2s; border: 2px solid transparent; 
         }
         .btn-ticket { border-color: var(--rouge-rouge); color: var(--rouge-rouge); }
@@ -127,9 +132,9 @@
         .btn-google { background: #4285F4; color: white; }
         .btn-news { background: #f1f3f4; color: #3c4043; border-color: #dadce0; }
 
-        @media (max-width: 1200px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; }
+        @media (max-width: 1100px) {
+            body { flex-direction: column; overflow-x: hidden; }
+            .sidebar { width: 100%; height: auto; position: static; }
             .main-content { min-width: auto; }
         }
     </style>
@@ -138,13 +143,13 @@
 
 <div id="login-screen">
     <div class="login-box">
-        <img src="https://upload.wikimedia.org/wikipedia/fr/a/a2/Rouge_FM_%28logo%29.svg" alt="Rouge FM" style="height:60px; margin-bottom:25px;">
+        <img src="https://upload.wikimedia.org/wikipedia/fr/a/a2/Rouge_FM_%28logo%29.svg" alt="Rouge FM" style="height:55px; margin-bottom:20px;">
         <input type="password" id="passInput" placeholder="Mot de passe..." onkeypress="if(event.key === 'Enter') login()">
         <button id="btnEntrer" onclick="login()">DÉVERROUILLER</button>
     </div>
 </div>
 
-<!-- BARRE LATÉRALE GAUCHE : PRIORITÉS -->
+<!-- BARRE GAUCHE : PRIORITÉS -->
 <div class="sidebar">
     <h2 class="side-title">🎙️ Priorités</h2>
     <div id="prioritesContainer"></div>
@@ -156,14 +161,13 @@
         <div class="search-header">
             <h1>Calendrier des spectacles</h1>
             <p class="slogan">Toujours un hit</p>
-            <p class="ia-warning">⚠️ Attention, ce tableau est généré par l'IA.</p>
         </div>
         <input type="text" id="searchBar" placeholder="Rechercher un artiste de notre répertoire..." onkeyup="faireRecherche()">
         <div id="resultArea"></div>
     </div>
 
     <div class="white-card">
-        <h2 style="text-transform: uppercase; font-weight: 900; margin: 0; font-size: 1.1em; display: flex; align-items: center; gap: 10px;">
+        <h2 style="text-transform: uppercase; font-weight: 900; margin: 0; font-size: 1.1em;">
             🎟️ Événements à venir
         </h2>
         <div style="height: 1px; background: #eee; margin: 15px 0;"></div>
@@ -171,7 +175,7 @@
     </div>
 </div>
 
-<!-- BARRE LATÉRALE DROITE : JOURNÉES -->
+<!-- BARRE DROITE : JOURNÉES -->
 <div class="sidebar">
     <h2 class="side-title">🌍 Journées</h2>
     <div id="journeesContainer"></div>
@@ -232,33 +236,31 @@
         const sequenceIdx = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
         const labels = ["Aujourd'hui", "Demain", "À venir"];
 
-        // 1. Priorités (Sidebar Gauche)
+        // 1. Priorités (Gauche)
         const contPrio = document.getElementById('prioritesContainer');
-        if (typeof prioritesSemaine !== 'undefined') {
+        if (typeof prioritesSemaine !== 'undefined' && contPrio) {
             let htmlP = "";
             sequenceIdx.forEach((idx, i) => {
                 const nomJ = joursNom[idx];
                 htmlP += `<div class="day-group-title">${labels[i]} (${nomJ.toUpperCase()})</div>`;
                 const list = prioritesSemaine[nomJ] || [];
                 if(list.length > 0) { list.forEach(p => htmlP += `<div class="side-item">${p}</div>`); }
-                else { htmlP += `<p style="opacity:0.6; font-style:italic; font-size:0.85em;">Aucune priorité.</p>`; }
+                else { htmlP += `<p style="opacity:0.6; font-style:italic; font-size:0.8em;">Aucune priorité.</p>`; }
             });
             contPrio.innerHTML = htmlP;
         }
 
-        // 2. Journées Mondiales (Automatique - Affiche les 6 prochains évènements)
+        // 2. Journées Mondiales (Droite - Scan auto pour les 6 prochaines)
         const contJournees = document.getElementById('journeesContainer');
-        if (typeof journeesMondiales !== 'undefined') {
+        if (typeof journeesMondiales !== 'undefined' && contJournees) {
             let htmlJ = "";
             let eventsFound = 0;
             let dayOffset = 0;
             const maxEvents = 6;
-            const maxLookAhead = 365; // Sécurité : on ne cherche pas au-delà d'un an
 
-            while (eventsFound < maxEvents && dayOffset < maxLookAhead) {
+            while (eventsFound < maxEvents && dayOffset < 365) {
                 const targetDate = new Date();
                 targetDate.setDate(d.getDate() + dayOffset);
-                
                 const dd = String(targetDate.getDate()).padStart(2, '0');
                 const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
                 const key = `${dd}-${mm}`;
@@ -267,14 +269,9 @@
                 if (list.length > 0) {
                     const nomDuJour = joursNom[targetDate.getDay()];
                     const dateAffiche = targetDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+                    let label = dayOffset === 0 ? "Aujourd'hui" : (dayOffset === 1 ? "Demain" : nomDuJour);
                     
-                    let label = "";
-                    if (dayOffset === 0) label = "Aujourd'hui";
-                    else if (dayOffset === 1) label = "Demain";
-                    else label = nomDuJour;
-
                     htmlJ += `<div class="day-group-title">${label.toUpperCase()}<br><small style="opacity:0.7">${dateAffiche}</small></div>`;
-                    
                     list.forEach(j => {
                         htmlJ += `<div class="side-item">${j}</div>`;
                         eventsFound++;
@@ -282,12 +279,12 @@
                 }
                 dayOffset++;
             }
-            contJournees.innerHTML = htmlJ || "<p style='opacity:0.6; font-style:italic; font-size:0.85em;'>Rien de spécial à venir.</p>";
+            contJournees.innerHTML = htmlJ || "<p style='opacity:0.6;'>Rien à signaler.</p>";
         }
 
-        // 3. Grille d'accueil (Spectacles chronologiques)
+        // 3. Grille d'accueil
         const grid = document.getElementById('homeGrid');
-        if (typeof baseDeDonnees !== 'undefined') {
+        if (typeof baseDeDonnees !== 'undefined' && grid) {
             const today = new Date();
             today.setHours(0,0,0,0);
             let allMajeurs = [];
@@ -305,14 +302,13 @@
             let htmlG = "";
             allMajeurs.forEach(item => {
                 const isBell = item.salle.toLowerCase().includes("bell");
-                htmlG += `
-                    <div class="card ${isBell ? 'bell' : ''}">
-                        <div class="card-artist">${item.artist}</div>
-                        <div class="card-date">${item.date}</div>
-                        <div class="card-venue">${item.salle}</div>
-                    </div>`;
+                htmlG += `<div class="card ${isBell ? 'bell' : ''}">
+                            <div class="card-artist">${item.artist}</div>
+                            <div class="card-date">${item.date}</div>
+                            <div class="card-venue">${item.salle}</div>
+                          </div>`;
             });
-            grid.innerHTML = htmlG || "<p style='color:#999'>Aucun événement majeur à venir.</p>";
+            grid.innerHTML = htmlG || "<p style='color:#999'>Aucun gros événement à venir.</p>";
         }
     }
 
@@ -339,7 +335,7 @@
                     const isMajeur = artiste.majeurs && artiste.majeurs.includes(s);
                     h += `<div class="card ${isMajeur ? 'bell' : ''}"><b>${s.date}</b><span>${s.salle}</span></div>`;
                 });
-            } else { h += `<p style="font-style:italic; color:#888; margin-top:10px;">Aucune date à venir.</p>`; }
+            } else { h += `<p style='font-style:italic; color:#888;'>Aucune date à venir.</p>`; }
             const enc = encodeURIComponent(artiste.nom);
             h += `<div class="btn-row">
                     <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" class="btn btn-ticket">🎟️ Billets</a>
@@ -347,9 +343,7 @@
                     <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA:fr" target="_blank" class="btn btn-news">📰 Actus</a>
                 </div>`;
             res.innerHTML = h;
-        } else {
-            res.innerHTML = `<p style="text-align:center; color:var(--rouge-rouge); font-weight:bold; margin-top:20px;">Artiste non trouvé.</p>`;
-        }
+        } else { res.innerHTML = `<p style='text-align:center; color:#d32f2f; font-weight:bold;'>Artiste non trouvé.</p>`; }
     }
 </script>
 </body>
