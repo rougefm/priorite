@@ -3,194 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>Studio Rouge FM</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eef2f5; padding: 20px; margin: 0; color: #333; }
+        /* RESET DE BASE POUR ÉVITER LES CHEVAUCHEMENTS */
+        * { box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; color: #333; }
         
-        /* --- ÉCRAN MOT DE PASSE --- */
-        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #d32f2f; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: opacity 0.5s; }
-        #login-screen img { max-height: 80px; margin-bottom: 20px; }
-        .login-box { background: rgba(0,0,0,0.1); padding: 40px; border-radius: 15px; text-align: center; }
-        .login-box h2 { margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
-        #passInput { width: 100%; padding: 15px; font-size: 18px; margin-top: 20px; border: none; border-radius: 8px; text-align: center; outline: none; }
-        #btnEntrer { margin-top: 20px; padding: 12px 30px; font-size: 16px; font-weight: bold; color: #d32f2f; background: white; border: none; border-radius: 8px; cursor: pointer; }
-
-        /* --- CONTENEUR PRINCIPAL ÉPURÉ --- */
-        #main-content { display: none; max-width: 850px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        /* --- ECRAN DE CONNEXION --- */
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #d32f2f; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .login-box { background: white; padding: 40px; border-radius: 10px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 90%; max-width: 400px; }
+        .login-box img { max-height: 60px; margin-bottom: 20px; }
+        .login-box h2 { margin-top: 0; color: #d32f2f; }
+        #passInput { width: 100%; padding: 15px; font-size: 18px; margin-top: 15px; border: 1px solid #ccc; border-radius: 5px; text-align: center; }
+        #btnEntrer { margin-top: 20px; padding: 15px 30px; font-size: 16px; font-weight: bold; color: white; background-color: #d32f2f; border: none; border-radius: 5px; cursor: pointer; width: 100%; }
         
-        .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
-        .header img { height: 50px; margin-bottom: 10px; }
-        .header h1 { margin: 0; font-size: 26px; color: #333; }
-
-        /* --- TITRES ROUGES ÉPURÉS --- */
-        h2 { color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; font-size: 22px; margin-top: 0; margin-bottom: 20px; text-transform: capitalize; }
-
-        /* --- LISTE DES PRIORITÉS --- */
-        .section-priorites { margin-bottom: 50px; clear: both; } /* Le 'clear: both' aide a eviter les chevauchements */
-        .priority-list { list-style: none; padding: 0; margin: 0; }
-        .priority-list li { padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 16px; line-height: 1.5; display: block; }
-        .priority-list li:last-child { border-bottom: none; }
-        .puce { font-weight: bold; margin-right: 8px; color: #d32f2f; }
-
-        /* --- SECTION RECHERCHE --- */
-        .section-recherche { clear: both; } /* Le 'clear: both' aide a eviter les chevauchements */
-        #searchInput { width: 100%; padding: 16px; font-size: 18px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline: none; margin-bottom: 20px; transition: 0.2s; display: block; }
-        #searchInput:focus { border-color: #d32f2f; box-shadow: 0 0 5px rgba(211, 47, 47, 0.3); }
+        /* --- CONTENU PRINCIPAL (1 COLONNE PROPRE) --- */
+        #main-content { display: none; max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
+        .entete { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
+        .entete img { height: 50px; margin-bottom: 15px; }
+        .entete h1 { color: #333; margin: 0; font-size: 26px; }
+
+        /* TITRES ROUGES */
+        .titre-section { color: #d32f2f; font-size: 22px; margin: 0 0 15px 0; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; text-transform: capitalize; }
+
+        /* --- BLOC PRIORITES --- */
+        .bloc-priorites { display: block; width: 100%; margin-bottom: 50px; }
+        .liste-priorites { list-style: none; padding: 0; margin: 0; }
+        .liste-priorites li { background-color: #fff5f5; border-left: 4px solid #d32f2f; padding: 15px; margin-bottom: 10px; border-radius: 0 5px 5px 0; font-size: 16px; line-height: 1.5; }
+
+        /* --- BLOC RECHERCHE --- */
+        .bloc-recherche { display: block; width: 100%; margin-bottom: 20px; }
+        #champRecherche { width: 100%; padding: 16px; font-size: 18px; border: 2px solid #ddd; border-radius: 5px; outline: none; transition: 0.3s; }
+        #champRecherche:focus { border-color: #d32f2f; }
+
         /* --- RÉSULTATS DE RECHERCHE --- */
-        #resultContainer { min-height: 100px; }
-        .result-box { margin-top: 20px; }
-        .result-box h3 { margin-top: 0; color: #333; font-size: 24px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .zone-resultats { background-color: #f9f9f9; padding: 25px; border-radius: 5px; border: 1px solid #eee; min-height: 150px; display: block; }
+        .nom-artiste { color: #333; font-size: 26px; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
         
-        .info-card { display: inline-block; background: #e3f2fd; color: #0d47a1; font-size: 14px; padding: 6px 12px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; }
+        .potin { background-color: #e3f2fd; color: #0d47a1; padding: 12px; border-radius: 5px; font-weight: bold; margin-bottom: 20px; font-size: 14px; border-left: 4px solid #2196f3; }
         
-        .section-title { font-weight: bold; color: #888; margin: 20px 0 10px 0; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; }
+        .sous-titre { color: #888; font-size: 12px; text-transform: uppercase; font-weight: bold; margin: 25px 0 10px 0; letter-spacing: 1px; }
         
-        .show-card { padding: 12px 0; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 4px; }
-        .show-card:last-child { border-bottom: none; }
-        .show-date { font-weight: bold; color: #d32f2f; font-size: 16px; }
-        .show-venue { color: #333; font-size: 15px; }
+        .spectacle-carte { background: white; border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .spectacle-carte.majeur { border-left: 4px solid #ff9800; background-color: #fffdf8; }
+        .date-show { color: #d32f2f; font-weight: bold; font-size: 16px; }
+        .salle-show { color: #444; font-size: 16px; }
 
-        .btn-container { display: flex; gap: 15px; margin-top: 30px; }
-        .btn-action { flex: 1; padding: 12px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 15px; border: 1px solid #ddd; color: #333; background: #fafafa; }
-        .btn-action:hover { background: #f0f0f0; }
+        .boutons { display: flex; gap: 15px; margin-top: 30px; }
+        .btn-lien { flex: 1; text-align: center; padding: 14px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 15px; }
+        .btn-tm { background-color: #026cdf; color: white; }
+        .btn-gg { background-color: white; color: #333; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="login-box">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Rouge_FM.svg" alt="Rouge FM" onerror="this.src='https://via.placeholder.com/150x50/d32f2f/ffffff?text=ROUGE'">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Rouge_FM.svg" alt="Rouge" onerror="this.style.display='none'">
             <h2>Outil Animateurs</h2>
             <input type="password" id="passInput" placeholder="Mot de passe">
-            <button id="btnEntrer" onclick="checkPassword()">Connexion</button>
+            <button id="btnEntrer" onclick="checkPassword()">Entrer</button>
         </div>
     </div>
 
     <div id="main-content">
-        <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Rouge_FM.svg" alt="Rouge FM" onerror="this.src='https://via.placeholder.com/150x50/ffffff/d32f2f?text=ROUGE'">
+        <div class="entete">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Rouge_FM.svg" alt="Rouge" onerror="this.style.display='none'">
             <h1>Informations & Spectacles</h1>
         </div>
 
-        <div class="section-priorites">
-            <h2 id="titre-priorites">📌 Priorités du jour</h2>
-            <ul class="priority-list" id="priorityContainer"></ul>
+        <div class="bloc-priorites">
+            <h2 class="titre-section" id="titre-priorites">📌 Priorités du jour</h2>
+            <ul class="liste-priorites" id="liste-priorites-html"></ul>
         </div>
 
-        <div class="section-recherche">
-            <h2>🔍 Recherche Artiste</h2>
-            <input type="text" id="searchInput" placeholder="Tapez un nom d'artiste (ex: Charlotte Cardin)..." autocomplete="off">
-            
-            <div id="resultContainer">
-                <p style="color:#888; text-align:center; margin-top:30px; font-size: 16px;">Commencez à taper un nom pour voir les infos et les spectacles.</p>
-            </div>
+        <div class="bloc-recherche">
+            <h2 class="titre-section">🔍 Recherche Artiste</h2>
+            <input type="text" id="champRecherche" placeholder="Tapez un nom d'artiste..." autocomplete="off">
+        </div>
+
+        <div class="zone-resultats" id="zone-resultats-html">
+            <p style="color:#888; text-align:center; font-size:16px; margin-top:40px;">Commencez à taper un nom pour voir les spectacles.</p>
         </div>
     </div>
 
-    <script src="priorites.js" onerror="alert('Fichier priorites.js manquant ou introuvable !');"></script>
-    <script src="spectacles.js" onerror="alert('Fichier spectacles.js manquant ou introuvable !');"></script>
+    <script src="priorites.js"></script>
+    <script src="spectacles.js"></script>
     
     <script>
-        const PWD = "Toujoursunhit2026";
-        const input = document.getElementById("passInput");
+        const MOT_DE_PASSE = "Toujoursunhit2026";
+        const inputPwd = document.getElementById("passInput");
         
-        input.addEventListener("keypress", function(event) { if (event.key === "Enter") checkPassword(); });
+        inputPwd.addEventListener("keypress", function(e) { 
+            if (e.key === "Enter") checkPassword(); 
+        });
 
         function checkPassword() {
-            if(input.value === PWD) {
-                document.getElementById('login-screen').style.opacity = "0";
-                setTimeout(() => {
-                    document.getElementById('login-screen').style.display = "none";
-                    document.getElementById('main-content').style.display = "block";
-                    chargerPriorites();
-                }, 400);
+            if(inputPwd.value === MOT_DE_PASSE) {
+                document.getElementById('login-screen').style.display = "none";
+                document.getElementById('main-content').style.display = "block";
+                afficherLesPriorites();
             } else {
                 alert("Mot de passe incorrect");
             }
         }
 
-        // --- AFFICHAGE DES PRIORITÉS ---
-        function chargerPriorites() {
-            const container = document.getElementById('priorityContainer');
-            container.innerHTML = "";
+        function afficherLesPriorites() {
+            const conteneur = document.getElementById('liste-priorites-html');
+            conteneur.innerHTML = "";
             
-            const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-            const jourActuel = jours[new Date().getDay()]; 
+            const joursDeLaSemaine = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+            const aujourdHui = joursDeLaSemaine[new Date().getDay()]; 
             
-            document.getElementById('titre-priorites').innerText = "📌 Priorités du " + jourActuel;
+            document.getElementById('titre-priorites').innerText = "📌 Priorités du " + aujourdHui;
 
-            if (typeof prioritesSemaine !== 'undefined' && prioritesSemaine[jourActuel]) {
-                prioritesSemaine[jourActuel].forEach(texte => {
+            if (typeof prioritesSemaine !== 'undefined' && prioritesSemaine[aujourdHui]) {
+                prioritesSemaine[aujourdHui].forEach(texte => {
                     let li = document.createElement("li");
-                    li.innerHTML = `<span class="puce">•</span> ${texte}`;
-                    container.appendChild(li);
+                    li.innerHTML = texte;
+                    conteneur.appendChild(li);
                 });
             } else {
-                container.innerHTML = "<li>Aucune priorité enregistrée pour aujourd'hui.</li>";
+                conteneur.innerHTML = "<li>Aucune priorité pour aujourd'hui.</li>";
             }
         }
 
-        // --- MOTEUR DE RECHERCHE ---
-        function enleverAccents(str) {
+        function nettoyerTexte(str) {
             return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         }
 
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const query = enleverAccents(e.target.value.trim());
-            const resultDiv = document.getElementById('resultContainer');
+        document.getElementById('champRecherche').addEventListener('input', function(e) {
+            const recherche = nettoyerTexte(e.target.value.trim());
+            const affichage = document.getElementById('zone-resultats-html');
             
-            if (query.length < 2) {
-                resultDiv.innerHTML = `<p style="color:#888; text-align:center; margin-top:30px; font-size: 16px;">Commencez à taper un nom...</p>`;
+            if (recherche.length < 2) {
+                affichage.innerHTML = `<p style="color:#888; text-align:center; font-size:16px; margin-top:40px;">Commencez à taper un nom...</p>`;
                 return;
             }
 
-            // CORRECTION CRUCIALE : On vérifie les deux noms de variables possibles
-            const dataBase = typeof baseDeDonnees !== 'undefined' ? baseDeDonnees : (typeof baseArtistes !== 'undefined' ? baseArtistes : null);
+            // On s'assure de prendre la bonne base de données
+            const baseDeChoix = typeof baseDeDonnees !== 'undefined' ? baseDeDonnees : (typeof baseArtistes !== 'undefined' ? baseArtistes : null);
 
-            if (!dataBase) {
-                resultDiv.innerHTML = `<p style="color:red; text-align:center;">Erreur technique: Le fichier spectacles.js n'est pas lié correctement.</p>`;
+            if (!baseDeChoix) {
+                affichage.innerHTML = `<p style="color:red; text-align:center; font-weight:bold;">Erreur: Le fichier spectacles.js ne charge pas.</p>`;
                 return;
             }
 
-            const artisteTrouve = dataBase.find(a => enleverAccents(a.nom).includes(query));
+            const artiste = baseDeChoix.find(a => nettoyerTexte(a.nom).includes(recherche));
 
-            if (artisteTrouve) {
-                let html = `<div class="result-box"><h3>${artisteTrouve.nom}</h3>`;
+            if (artiste) {
+                let codeHtml = `<h3 class="nom-artiste">${artiste.nom}</h3>`;
                 
-                if (artisteTrouve.info && artisteTrouve.info.trim() !== "") {
-                    html += `<div class="info-card">🎙️ ${artisteTrouve.info}</div>`;
+                if (artiste.info && artiste.info.trim() !== "") {
+                    codeHtml += `<div class="potin">🎙️ Info Rouge: ${artiste.info}</div>`;
                 }
 
-                const showsLocaux = artisteTrouve.prochains || [];
-                const showsMajeurs = artisteTrouve.majeurs || [];
+                const spectaclesLocaux = artiste.prochains || [];
+                const spectaclesMajeurs = artiste.majeurs || [];
 
-                if (showsLocaux.length > 0) {
-                    html += `<div class="section-title">📍 En région / Locaux</div>`;
-                    showsLocaux.forEach(show => { 
-                        html += `<div class="show-card"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; 
+                if (spectaclesLocaux.length > 0) {
+                    codeHtml += `<div class="sous-titre">📍 Spectacles Locaux</div>`;
+                    spectaclesLocaux.forEach(spectacle => { 
+                        codeHtml += `<div class="spectacle-carte"><div class="date-show">${spectacle.date}</div><div class="salle-show">${spectacle.salle}</div></div>`; 
                     });
-                } else if (showsMajeurs.length === 0) {
-                    html += `<p style="color:#888; font-style:italic; margin: 20px 0;">Aucune date confirmée au système.</p>`;
+                } else if (spectaclesMajeurs.length === 0) {
+                    codeHtml += `<p style="color:#666; font-style:italic;">Aucune date de spectacle confirmée.</p>`;
                 }
 
-                if (showsMajeurs.length > 0) {
-                    html += `<div class="section-title">⭐ Événements majeurs</div>`;
-                    showsMajeurs.forEach(show => { 
-                        html += `<div class="show-card highlight"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; 
+                if (spectaclesMajeurs.length > 0) {
+                    codeHtml += `<div class="sous-titre">⭐ Centre Bell / Événements Majeurs</div>`;
+                    spectaclesMajeurs.forEach(spectacle => { 
+                        codeHtml += `<div class="spectacle-carte majeur"><div class="date-show">${spectacle.date}</div><div class="salle-show">${spectacle.salle}</div></div>`; 
                     });
                 }
 
-                const nomPourRecherche = encodeURIComponent(artisteTrouve.nom);
-                html += `
-                    <div class="btn-container">
-                        <a href="https://www.ticketmaster.ca/search?q=${nomPourRecherche}" target="_blank" class="btn-action">🎟️ Ticketmaster</a>
-                        <a href="https://www.google.com/search?q=billets+spectacle+${nomPourRecherche}+Montréal+Québec" target="_blank" class="btn-action">🔍 Google</a>
+                const urlRecherche = encodeURIComponent(artiste.nom);
+                codeHtml += `
+                    <div class="boutons">
+                        <a href="https://www.ticketmaster.ca/search?q=${urlRecherche}" target="_blank" class="btn-lien btn-tm">🎟️ Ticketmaster</a>
+                        <a href="https://www.google.com/search?q=billets+spectacle+${urlRecherche}+Montréal+Québec" target="_blank" class="btn-lien btn-gg">🔍 Recherche Google</a>
                     </div>
-                </div>`;
-                resultDiv.innerHTML = html;
+                `;
+                affichage.innerHTML = codeHtml;
             } else {
-                resultDiv.innerHTML = `<p style="color:#d32f2f; text-align:center; margin-top:30px;">Aucun artiste trouvé pour "${e.target.value}".</p>`;
+                affichage.innerHTML = `<p style="color:#d32f2f; text-align:center; font-weight:bold; margin-top:40px;">Aucun artiste trouvé pour "${e.target.value}"</p>`;
             }
         });
     </script>
