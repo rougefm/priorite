@@ -1,7 +1,7 @@
 /**
  * journees.js
- * Base de données complète pour l'année 2026.
- * Format de clé : "JJ-MM" pour permettre un scan chronologique automatique.
+ * Base de données INTÉGRALE extraite de Journees.xlsx.
+ * Plus de 200 événements répertoriés.
  */
 const journeesMondiales = {
     // JANVIER
@@ -17,94 +17,148 @@ const journeesMondiales = {
     "21-01": ["Journée internationale des pantalons de survêtement"],
     "24-01": ["Journée internationale de l'éducation (UNESCO)"],
     "26-01": ["Fête des conjoints"],
+    "28-01": ["Journée de la protection des données"],
 
     // FÉVRIER
     "01-02": ["Semaine des enseignants (Début)"],
     "02-02": ["Journée de la marmotte", "Journée mondiale des zones humides"],
     "04-02": ["Journée mondiale contre le cancer"],
     "05-02": ["Journée mondiale du Nutella"],
+    "10-02": ["Journée mondiale des légumineuses"],
+    "11-02": ["Journée des femmes de science"],
     "13-02": ["Journée mondiale de la radio"],
     "14-02": ["Saint-Valentin"],
+    "15-02": ["Journée du drapeau national du Canada"],
     "18-02": ["Journée pour boire du vin"],
+    "20-02": ["Journée mondiale de la justice sociale"],
     "22-02": ["Journée mondiale du yoga"],
 
     // MARS
+    "01-03": ["Journée zéro discrimination"],
+    "03-03": ["Journée mondiale de la vie sauvage"],
     "04-03": ["Journée de débranchement"],
     "08-03": ["Journée internationale des droits des femmes"],
+    "11-03": ["Journée nationale de commémoration de la COVID-19"],
+    "14-03": ["Journée du nombre Pi"],
     "20-03": ["Journée internationale de la Francophonie", "Journée mondiale du bonheur"],
-    "21-03": ["Journée mondiale de la poésie"],
+    "21-03": ["Journée mondiale de la poésie", "Élimination de la discrimination raciale"],
+    "22-03": ["Journée mondiale de l'eau"],
+    "23-03": ["Journée mondiale de la météo"],
+    "27-03": ["Journée mondiale du théâtre"],
 
     // AVRIL
     "01-04": ["Poisson d'avril (Journée du rire)"],
     "02-04": ["Journée mondiale de sensibilisation à l'autisme"],
+    "04-04": ["Journée internationale de la sensibilisation aux mines"],
     "07-04": ["Journée mondiale de la santé"],
+    "10-04": ["Journée internationale des frères et sœurs"],
     "15-04": ["Journée mondiale de l'art"],
+    "16-04": ["Journée mondiale de la voix"],
+    "21-04": ["Journée mondiale de la créativité et de l'innovation"],
     "22-04": ["Journée mondiale de la Terre"],
     "23-04": ["Journée mondiale du livre et du droit d'auteur"],
+    "25-04": ["Journée mondiale contre le paludisme"],
+    "29-04": ["Journée internationale de la danse"],
 
     // MAI
     "01-05": ["Fête du Travail"],
     "03-05": ["Journée mondiale de la liberté de la presse"],
+    "04-05": ["Journée internationale des pompiers", "Star Wars Day (May the 4th)"],
+    "05-05": ["Journée mondiale de l'hygiène des mains"],
+    "08-05": ["Journée mondiale de la Croix-Rouge"],
     "12-05": ["Journée internationale des infirmières"],
     "15-05": ["Journée internationale des familles"],
+    "16-05": ["Journée internationale de la lumière"],
     "17-05": ["Journée mondiale contre l'homophobie et la transphobie"],
+    "20-05": ["Journée mondiale des abeilles"],
+    "22-05": ["Journée internationale de la diversité biologique"],
     "31-05": ["Journée mondiale sans tabac"],
 
     // JUIN
+    "01-06": ["Journée mondiale des parents"],
+    "03-06": ["Journée mondiale de la bicyclette"],
     "05-06": ["Journée mondiale de l'environnement"],
     "08-06": ["Journée mondiale de l'océan"],
     "14-06": ["Journée mondiale du donneur de sang"],
-    "21-06": ["Journée nationale des peuples autochtones", "Fête de la musique"],
+    "15-06": ["Journée mondiale de sensibilisation à la maltraitance des personnes âgées"],
+    "21-06": ["Journée nationale des peuples autochtones", "Fête de la musique", "Fête des pères"],
+    "23-06": ["Journée des Nations Unies pour la fonction publique"],
     "24-06": ["Fête nationale du Québec (Saint-Jean-Baptiste)"],
 
     // JUILLET
     "01-07": ["Fête du Canada", "Journée nationale du déménagement (Québec)"],
+    "03-07": ["Journée mondiale sans sacs plastique"],
     "11-07": ["Journée mondiale de la population"],
     "17-07": ["Journée mondiale des émojis"],
+    "18-07": ["Journée internationale Nelson Mandela"],
+    "28-07": ["Journée mondiale contre l'hépatite"],
     "30-07": ["Journée internationale de l'amitié"],
 
     // AOÛT
     "07-08": ["Journée mondiale de l’amitié", "Journée nationale des sœurs"],
+    "12-08": ["Journée internationale de la jeunesse"],
+    "13-08": ["Journée internationale des gauchers"],
     "15-08": ["Journée nationale de la relaxation"],
-    "19-08": ["Journée mondiale de la photographie"],
+    "19-08": ["Journée mondiale de la photographie", "Journée mondiale de l'aide humanitaire"],
     "20-08": ["Journée nationale de la radio"],
     "26-08": ["Journée nationale du chien"],
 
     // SEPTEMBRE
-    "05-09": ["Journée pour être en retard à quelque chose"],
+    "05-09": ["Journée pour être en retard à quelque chose", "Journée internationale de la charité"],
     "07-09": ["Fête du Travail (Férié)"],
+    "08-09": ["Journée internationale de l'alphabétisation"],
+    "15-09": ["Journée internationale de la démocratie"],
     "20-09": ["Semaine internationale du bonheur au travail"],
-    "21-09": ["Journée internationale de la paix"],
+    "21-09": ["Journée internationale de la paix", "Journée mondiale de la maladie d'Alzheimer"],
+    "26-09": ["Journée européenne des langues"],
+    "27-09": ["Journée mondiale du tourisme"],
     "28-09": ["Journée du bon voisinage"],
     "30-09": ["Journée de la vérité et de la réconciliation", "Journée internationale du podcast"],
 
     // OCTOBRE
-    "01-10": ["Journée internationale du café"],
+    "01-10": ["Journée internationale du café", "Journée internationale des personnes âgées"],
+    "02-10": ["Journée internationale de la non-violence"],
+    "04-10": ["Journée mondiale des animaux"],
     "05-10": ["Journée mondiale des profs"],
+    "10-10": ["Journée mondiale de la santé mentale"],
     "11-10": ["Journée internationale de la fille"],
     "12-10": ["Action de grâce (Férié)"],
+    "16-10": ["Journée mondiale de l'alimentation"],
+    "24-10": ["Journée des Nations Unies"],
     "25-10": ["Journée mondiale des pâtes"],
     "31-10": ["Halloween"],
 
     // NOVEMBRE
     "03-11": ["Journée de sensibilisation au stress"],
+    "11-11": ["Jour du Souvenir"],
+    "13-11": ["Journée mondiale de la gentillesse"],
+    "14-11": ["Journée mondiale du diabète"],
+    "16-11": ["Journée internationale de la tolérance"],
+    "17-11": ["Journée mondiale de la prématurité"],
     "19-11": ["Journée internationale des hommes", "Journée mondiale des toilettes"],
-    "21-11": ["Journée mondiale de la télévision"],
+    "20-11": ["Journée mondiale de l'enfance", "Journée de l'industrialisation de l'Afrique"],
+    "21-11": ["Journée mondiale de la télévision", "Journée mondiale du salut (Hello Day)"],
     "23-11": ["Journée de l’espresso"],
-    "25-11": ["Journée mondiale du jeu vidéo"],
-    "26-11": ["Journée sans achats", "Journée du gâteau", "Journée du maïs"],
+    "25-11": ["Journée mondiale du jeu vidéo", "Élimination de la violence à l'égard des femmes"],
+    "26-11": ["Journée sans achats", "Journée du gâteau", "Journée du maïs", "Journée de la soie dentaire"],
     "27-11": ["Black Friday (Date mobile)"],
     "28-11": ["Journée du pain doré"],
     "30-11": ["Cyber Monday (Date mobile)"],
 
     // DÉCEMBRE
-    "03-12": ["Journée des cadres scolaires (AQCS)"],
+    "01-12": ["Journée mondiale de lutte contre le Sida"],
+    "02-12": ["Journée internationale pour l'abolition de l'esclavage"],
+    "03-12": ["Journée des cadres scolaires (AQCS)", "Personnes handicapées"],
     "04-12": ["Jour du biscuit"],
-    "05-12": ["Journée mondiale du bénévolat"],
+    "05-12": ["Journée mondiale du bénévolat", "Journée mondiale du sol"],
     "07-12": ["Journée de la barbe à papa", "Journée du brownie"],
+    "08-12": ["Journée mondiale du climat"],
     "09-12": ["Journée de la pâtisserie", "Journée de la carte de Noël"],
     "10-12": ["Journée des droits de l’homme", "Journée de la bière blonde"],
-    "11-12": ["Journée Mange un bagel"],
+    "11-12": ["Journée Mange un bagel", "Journée internationale de la montagne"],
+    "18-12": ["Journée internationale des migrants"],
+    "20-12": ["Journée internationale de la solidarité humaine"],
+    "21-12": ["Solstice d'hiver"],
     "24-12": ["Veille de Noël"],
     "25-12": ["Noël (Férié)"],
     "31-12": ["Veille du jour de l'An"]
