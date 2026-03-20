@@ -108,7 +108,8 @@
     // Vérification de session au démarrage
     if(localStorage.getItem('rouge_vrai_acces') === 'oui') {
         document.getElementById('login-screen').style.display = 'none';
-        window.onload = initialiserPage;
+        // Petit délai pour laisser les scripts externes charger si nécessaire
+        setTimeout(initialiserPage, 100);
     }
 
     function verifier() {
@@ -124,8 +125,8 @@
 
     function initialiserPage() {
         // Chargement des Priorités
-        if (typeof prioritesSemaine !== 'undefined') {
-            const container = document.getElementById('prioritesContainer');
+        const container = document.getElementById('prioritesContainer');
+        if (typeof prioritesSemaine !== 'undefined' && container) {
             const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
             const d = new Date();
             const indices = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
@@ -146,11 +147,11 @@
         }
 
         // Chargement de la grille "Gros événements"
-        if (typeof baseDeDonnees !== 'undefined') {
-            const grid = document.getElementById('gridShows');
+        const grid = document.getElementById('gridShows');
+        if (typeof baseDeDonnees !== 'undefined' && grid) {
             let htmlGrid = "";
             baseDeDonnees.forEach(a => {
-                if(a.majeurs) {
+                if(a.majeurs && a.majeurs.length > 0) {
                     a.majeurs.forEach(m => {
                         const isBell = m.salle.toLowerCase().includes("bell");
                         htmlGrid += `
@@ -162,7 +163,7 @@
                     });
                 }
             });
-            grid.innerHTML = htmlGrid;
+            grid.innerHTML = htmlGrid || "<p style='color:#888; grid-column: 1 / -1; text-align: center;'>Aucun événement majeur répertorié dans spectacles.js</p>";
         }
     }
 
