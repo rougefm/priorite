@@ -1,22 +1,3 @@
-// =========================================================================
-// 🔴 SECTION 1 : PRIORITÉS DE LA SEMAINE 🔴
-// Modifiez les phrases entre les guillemets.
-// Cette liste s'affichera en permanence dans la colonne de gauche.
-// =========================================================================
-
-const prioritesGenerales = [
-    "Dès 9h: 2h sans interruption + Mega Mix Payants - Jusqu'à 10 000$ à gagner",
-    "Gagnez votre voyage au Club Med grâce à Pipi et Cricri",
-    "Mettez de l'avant l'écoute en ligne - Minimum 1x par show",
-    "Parler de la mise en vente de Luke Combs ce vendredi",
-    "15h55: Ne manquez pas le retour à la maison musicale francophone #1 au pays"
-];
-
-// =========================================================================
-// 🔵 SECTION 2 : BASE DE DONNÉES DES ARTISTES 🔵
-// Ajoutez "info": "Votre texte" pour ajouter un potin/info sur l'artiste.
-// =========================================================================
-
 const baseArtistes = [
     {"nom": "112", "prochains": [], "majeurs": []},
     {"nom": "1975", "prochains": [], "majeurs": []},
