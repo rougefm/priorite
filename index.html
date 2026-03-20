@@ -76,7 +76,7 @@
         .auto-card.bell .auto-date { color: #f57f17; }
         .auto-venue { font-size: 0.85em; color: #666; margin-top: 4px;}
         
-        /* Bulle d'info artiste */
+        /* Bulle d'info artiste (ajoutée depuis le nouveau code) */
         .info-bulle { display: inline-block; background: #e3f2fd; color: #0d47a1; font-size: 14px; padding: 8px 12px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; border-left: 4px solid #2196f3; }
     </style>
 </head>
@@ -97,7 +97,8 @@
     <div class="priorities-panel">
         <h2 class="priority-main-title" id="titrePriorites">🎙️ Priorités Rouge</h2>
         <div id="prioritesContainer">
-            </div>
+            <!-- Le contenu s'affichera ici -->
+        </div>
     </div>
 
     <div class="shows-panel">
@@ -116,6 +117,7 @@
 
         <div class="shows-box">
             <h2 class="box-title">🎟️ Gros événements à venir</h2>
+            <!-- Cette section est "en dur" mais tu pourras la rendre dynamique plus tard si tu veux -->
             <div class="grid-shows" id="autoMontrealList">
                 <div class="auto-card bell"><div class="auto-artist">LADY GAGA</div><div class="auto-date">2-3-6 Avril 2026</div><div class="auto-venue">Centre Bell, Montréal</div></div>
                 <div class="auto-card bell"><div class="auto-artist">RAYE</div><div class="auto-date">12 Avril 2026</div><div class="auto-venue">Place Bell, Laval</div></div>
@@ -135,8 +137,9 @@
 
 </div>
 
-<script src="priorites.js" onerror="afficherErreurChargement()"></script>
-<script src="spectacles.js" onerror="afficherErreurChargement()"></script>
+<!-- INCLUSION DES DEUX NOUVEAUX FICHIERS DE DONNÉES -->
+<script src="priorites.js" onerror="afficherErreurChargement('priorites.js')"></script>
+<script src="spectacles.js" onerror="afficherErreurChargement('spectacles.js')"></script>
 
 <script>
     // --- GESTION DU MOT DE PASSE ---
@@ -184,3 +187,110 @@
 
             html += `<div class="day-title" style="margin-top: 25px;">Demain (${jourDemain})</div>`;
             const prioDemain = prioritesSemaine[jourDemain];
+            if (prioDemain && prioDemain.length > 0) {
+                prioDemain.forEach(p => { html += `<div class="priority-item priority-item-future">${p}</div>`; });
+            } else { html += `<p class="priority-empty">Rien à l'agenda pour demain.</p>`; }
+
+            html += `<div class="day-title" style="margin-top: 25px;">À venir (${jourApresDemain})</div>`;
+            const prioApresDemain = prioritesSemaine[jourApresDemain];
+            if (prioApresDemain && prioApresDemain.length > 0) {
+                prioApresDemain.forEach(p => { html += `<div class="priority-item priority-item-future">${p}</div>`; });
+            } else { html += `<p class="priority-empty" style="margin-bottom:0;">Rien à l'agenda pour le moment.</p>`; }
+
+            conteneur.innerHTML = html;
+        }
+    }
+
+    // --- GESTION DES ERREURS DE CHARGEMENT ---
+    function afficherErreurChargement(nomFichier) {
+        if (nomFichier === 'priorites.js') {
+            const conteneur = document.getElementById('prioritesContainer');
+            conteneur.innerHTML += `
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong>⚠️ Fichier "${nomFichier}" non trouvé.</strong><br><br>
+                    Assurez-vous qu'il se trouve dans le même dossier sur Glitch ou SharePoint.
+                </div>
+            `;
+        } else if (nomFichier === 'spectacles.js') {
+            const resultDiv = document.getElementById('resultArea');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `<p style="color:#d32f2f; font-weight:bold; text-align:center;">⚠️ Fichier "${nomFichier}" non trouvé. La recherche ne fonctionnera pas.</p>`;
+        }
+    }
+
+    // --- MOTEUR DE RECHERCHE ---
+    function enleverAccents(texte) { return texte.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+
+    const motsClesFestivals = [
+        "festival d'été de québec", "festival d'ete de quebec", "feq", 
+        "lasso", "osheaga", "festivoix", "festi voix",
+        "lac des nations", "amphithéâtre", "amphitheatre"
+    ];
+
+    function recherche() {
+        const inputBrut = document.getElementById('searchBar').value.toLowerCase().trim();
+        const inputNettoye = enleverAccents(inputBrut);
+        const resultDiv = document.getElementById('resultArea');
+        
+        if (inputNettoye.length < 2) { 
+            resultDiv.style.display = 'none';
+            resultDiv.innerHTML = "";
+            return; 
+        }
+
+        if (typeof baseDeDonnees === 'undefined') {
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `<p style="color:#d32f2f; font-weight:bold; text-align:center;">Impossible de chercher. Le fichier <em>spectacles.js</em> manque ou contient une erreur.</p>`;
+            return;
+        }
+
+        resultDiv.style.display = 'block';
+        const artisteTrouve = baseDeDonnees.find(a => enleverAccents(a.nom.toLowerCase()).includes(inputNettoye));
+
+        if (artisteTrouve) {
+            let html = `<div class="artist-name">${artisteTrouve.nom}</div>`;
+            
+            let showsReguliers = [];
+            let showsMajeurs = [];
+
+            if (artisteTrouve.majeurs) showsMajeurs = [...artisteTrouve.majeurs];
+
+            if (artisteTrouve.prochains) {
+                artisteTrouve.prochains.forEach(show => {
+                    let nomSalleClean = enleverAccents(show.salle.toLowerCase());
+                    let estUnFestival = motsClesFestivals.some(mot => nomSalleClean.includes(mot));
+                    if (estUnFestival) showsMajeurs.push(show);
+                    else showsReguliers.push(show);
+                });
+            }
+            
+            if (showsReguliers.length > 0) {
+                html += `<div class="section-title">📅 Prochains spectacles</div>`;
+                showsReguliers.forEach(show => { html += `<div class="show-card"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; });
+            } else if (showsMajeurs.length === 0) {
+                html += `<p style="color:#666; font-style:italic; margin-bottom: 20px;">Aucune date locale confirmée au système.</p>`;
+            }
+
+            if (showsMajeurs.length > 0) {
+                html += `<div class="section-title">⭐ Événements majeurs</div>`;
+                showsMajeurs.forEach(show => { html += `<div class="show-card highlight"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; });
+            }
+
+            const nomPourTicketmaster = encodeURIComponent(enleverAccents(artisteTrouve.nom));
+            const nomPourGoogle = encodeURIComponent(artisteTrouve.nom);
+            
+            html += `
+                <div class="btn-container">
+                    <a href="https://www.ticketmaster.ca/search?q=${nomPourTicketmaster}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets Ticketmaster</a>
+                    <a href="https://www.google.com/search?q=billets+spectacle+${nomPourGoogle}+Montréal+Québec" target="_blank" class="btn-action btn-google">🔍 Recherche Google</a>
+                </div>
+            `;
+            resultDiv.innerHTML = html;
+        } else {
+            resultDiv.innerHTML = `<div class="search-error-msg">Aucun artiste ne correspond à "${inputBrut}".</div>`;
+        }
+    }
+</script>
+
+</body>
+</html>
