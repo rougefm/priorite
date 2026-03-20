@@ -15,7 +15,7 @@
         #passInput { width: 100%; padding: 15px; font-size: 18px; margin-top: 20px; border: none; border-radius: 8px; text-align: center; outline: none; }
         #btnEntrer { margin-top: 20px; padding: 12px 30px; font-size: 16px; font-weight: bold; color: #d32f2f; background: white; border: none; border-radius: 8px; cursor: pointer; }
 
-        /* --- CONTENEUR PRINCIPAL ÉPURÉ (COMME TA CAPTURE) --- */
+        /* --- CONTENEUR PRINCIPAL ÉPURÉ --- */
         #main-content { display: none; max-width: 850px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
         .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
@@ -26,18 +26,20 @@
         h2 { color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; font-size: 22px; margin-top: 0; margin-bottom: 20px; text-transform: capitalize; }
 
         /* --- LISTE DES PRIORITÉS --- */
-        .section-priorites { margin-bottom: 50px; }
+        .section-priorites { margin-bottom: 50px; clear: both; } /* Le 'clear: both' aide a eviter les chevauchements */
         .priority-list { list-style: none; padding: 0; margin: 0; }
-        .priority-list li { padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 16px; line-height: 1.5; }
+        .priority-list li { padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 16px; line-height: 1.5; display: block; }
         .priority-list li:last-child { border-bottom: none; }
-        .puce { font-weight: bold; margin-right: 8px; }
+        .puce { font-weight: bold; margin-right: 8px; color: #d32f2f; }
 
         /* --- SECTION RECHERCHE --- */
-        #searchInput { width: 100%; padding: 16px; font-size: 18px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline: none; margin-bottom: 20px; transition: 0.2s; }
+        .section-recherche { clear: both; } /* Le 'clear: both' aide a eviter les chevauchements */
+        #searchInput { width: 100%; padding: 16px; font-size: 18px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline: none; margin-bottom: 20px; transition: 0.2s; display: block; }
         #searchInput:focus { border-color: #d32f2f; box-shadow: 0 0 5px rgba(211, 47, 47, 0.3); }
         
         /* --- RÉSULTATS DE RECHERCHE --- */
         #resultContainer { min-height: 100px; }
+        .result-box { margin-top: 20px; }
         .result-box h3 { margin-top: 0; color: #333; font-size: 24px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
         
         .info-card { display: inline-block; background: #e3f2fd; color: #0d47a1; font-size: 14px; padding: 6px 12px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; }
@@ -86,8 +88,8 @@
         </div>
     </div>
 
-    <script src="priorites.js"></script>
-    <script src="spectacles.js"></script>
+    <script src="priorites.js" onerror="alert('Fichier priorites.js manquant ou introuvable !');"></script>
+    <script src="spectacles.js" onerror="alert('Fichier spectacles.js manquant ou introuvable !');"></script>
     
     <script>
         const PWD = "Toujoursunhit2026";
@@ -175,7 +177,7 @@
                 if (showsMajeurs.length > 0) {
                     html += `<div class="section-title">⭐ Événements majeurs</div>`;
                     showsMajeurs.forEach(show => { 
-                        html += `<div class="show-card"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; 
+                        html += `<div class="show-card highlight"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; 
                     });
                 }
 
