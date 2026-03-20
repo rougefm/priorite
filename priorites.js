@@ -1,35 +1,38 @@
+// Gestion des priorités d'antenne par jour
 const prioritesSemaine = {
     "lundi": [
-        "Dès 9h: 2h sans interruption + Mega Mix Payants - Jusqu'à 10 000$ à gagner",
-        "Gagnez votre voyage au Club Med grâce à Pipi et Cricri",
-        "15h55: Ne manquez pas le retour à la maison musicale francophone #1 au pays"
+        "Lancement du concours 'Weekend à New York'",
+        "Nouveauté : Dua Lipa - Training Season",
+        "Rappel : Billets pour Charlotte Cardin en vente à 10h"
     ],
     "mardi": [
-        "Mettez de l'avant l'écoute en ligne - Minimum 1x par show",
-        "Le concours de la semaine continue...",
-        "Parler de Lady Gaga au Centre Bell"
+        "Focus : Les 3 Accords au MTELUS (Complet)",
+        "Flash : Nouvel album de Taylor Swift",
+        "Quiz : Gagnez vos accès pour le FestiVoix"
     ],
     "mercredi": [
-        "Grosse annonce à 16h00 !",
-        "Tirage : Un voyage à Toronto pour voir Bruno Mars"
+        "Mercredi Nostalgie : Spécial années 2000",
+        "Entrevue : Roxane Bruneau à 16h15",
+        "Annonce : Tête d'affiche d'Osheaga dévoilée"
     ],
     "jeudi": [
         "C'est le Jeudi Rétro !",
-        "N'oubliez pas de plugger le show des Trois Accords"
+        "N'oubliez pas de plugger le show des Trois Accords",
+        "Mise en vente : Lady Gaga au Centre Bell"
     ],
     "vendredi": [
-        "La compil weekend avec Denis et Gégé: Est-ce que Gone Gone Gone sera toujours #1",
+        "La compil weekend avec Denis et Gégé",
         "VHDW: On débute avec 2h et vos billets pour Gaga",
-        "Demain 16h: Il va faire chaud avec Playa Del Party avec MA Berthiaume"
+        "Demain 16h: Il va faire chaud avec Playa Del Party"
     ],
     "samedi": [
-        "La compil weekend avec Denis et Gégé: Est-ce que Gone Gone Gone sera toujours #1",
-        "VHDW: On débute avec 2h et vos billets pour Gaga",
-        "16h: Il va faire chaud avec Playa Del Party avec MA Berthiaume"
+        "Le décompte Rouge avec les plus gros hits",
+        "Spécial : Les coulisses du FEQ",
+        "Rappel : Sortie du nouveau clip de FouKi"
     ],
     "dimanche": [
-        "Demain 9h: MAINTENANT 2h sans interruption + Mega Mix Payants - Jusqu'à 10 000$ à gagner",
-        "Gagnez votre voyage au Club Med grâce à Pipi et Cricri",
-        "15h55: Ne manquez pas le retour à la maison musicale francophone #1 au pays"
+        "Dimanche Douceur : Les plus belles balades",
+        "Récap : Les meilleurs moments de la semaine",
+        "À ne pas manquer demain : Début du nouveau concours"
     ]
 };
