@@ -14,12 +14,12 @@
         #btnEntrer { background: white; color: #d32f2f; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.2s; }
         #btnEntrer:hover { background: #f0f0f0; transform: scale(1.02); }
 
-        /* --- LAYOUT PRINCIPAL --- */
+        /* --- STRUCTURE PRINCIPALE --- */
         .dashboard-layout { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1300px; margin: 0 auto; align-items: flex-start; }
         
-        /* --- COLONNE GAUCHE (Priorités) --- */
+        /* --- PRIORITÉS (GAUCHE) --- */
         .priorities-panel { flex: 1 1 350px; background: #d32f2f; padding: 30px; border-radius: 15px; color: white; min-height: 85vh; box-shadow: 0 4px 15px rgba(211,47,47,0.3); }
-        .priority-main-title { font-size: 1.4em; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .priority-main-title { font-size: 1.4em; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px; margin-bottom: 25px; }
         .day-title { font-size: 1em; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #fff; margin-top: 25px;}
         .day-title:first-of-type { margin-top: 0; }
         .priority-item { background: rgba(255,255,255,0.15); padding: 15px; margin-bottom: 12px; border-radius: 10px; font-size: 1.05em; font-weight: 600; line-height: 1.4; }
@@ -53,7 +53,7 @@
 
         /* Gros Événements */
         .shows-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .box-title { font-size: 1.35em; font-weight: 900; color: #000; border-bottom: 2px solid #000; margin-bottom: 20px; padding-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+        .box-title { font-size: 1.35em; font-weight: 900; color: #000; border-bottom: 2px solid #000; margin-bottom: 20px; padding-bottom: 12px; text-transform: uppercase; }
         .grid-shows { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .auto-card { background: #fcfcfc; padding: 18px; border-radius: 10px; border: 1px solid #f0f0f0; border-left: 5px solid #d32f2f; }
         .auto-card.bell { border-left-color: #fbc02d; background: #fffde7; border-color: #fff9c4; }
@@ -98,91 +98,120 @@
     </div>
 </div>
 
+<!-- CHARGEMENT DES FICHIERS EXTERNES -->
 <script src="priorites.js"></script>
 <script src="spectacles.js"></script>
 
 <script>
-    const PWD = "Toujoursunhit2026";
+    const PWD_STUDIO = "Toujoursunhit2026";
+
+    // Vérification de session au démarrage
+    if(localStorage.getItem('rouge_vrai_acces') === 'oui') {
+        document.getElementById('login-screen').style.display = 'none';
+        window.onload = initialiserPage;
+    }
 
     function verifier() {
-        if(document.getElementById('passInput').value === PWD) {
+        const val = document.getElementById('passInput').value;
+        if(val === PWD_STUDIO) {
             document.getElementById('login-screen').style.display = 'none';
-            localStorage.setItem('rouge_session', 'vrai');
-            initialiser();
+            localStorage.setItem('rouge_vrai_acces', 'oui');
+            initialiserPage();
+        } else {
+            alert("Mot de passe incorrect");
         }
     }
 
-    if(localStorage.getItem('rouge_session') === 'vrai') {
-        document.getElementById('login-screen').style.display = 'none';
-        window.onload = initialiser;
-    }
-
-    function initialiser() {
-        // Priorités
+    function initialiserPage() {
+        // Chargement des Priorités
         if (typeof prioritesSemaine !== 'undefined') {
-            const cont = document.getElementById('prioritesContainer');
+            const container = document.getElementById('prioritesContainer');
             const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
             const d = new Date();
             const indices = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
             const labels = ["Aujourd'hui", "Demain", "À venir"];
-            let htmlP = "";
+            
+            let html = "";
             indices.forEach((idx, i) => {
-                const j = jours[idx];
-                htmlP += `<div class="day-title">${labels[i]} (${j})</div>`;
-                const list = prioritesSemaine[j] || [];
-                if(list.length > 0) { list.forEach(p => htmlP += `<div class="priority-item">${p}</div>`); }
-                else { htmlP += `<p style="opacity:0.6; font-style:italic;">Rien à signaler.</p>`; }
+                const jourCle = jours[idx];
+                html += `<div class="day-title">${labels[i]} (${jourCle})</div>`;
+                const list = prioritesSemaine[jourCle] || [];
+                if(list.length > 0) {
+                    list.forEach(p => html += `<div class="priority-item">${p}</div>`);
+                } else {
+                    html += `<p style="opacity:0.6; font-style:italic;">Rien à signaler.</p>`;
+                }
             });
-            cont.innerHTML = htmlP;
+            container.innerHTML = html;
         }
 
-        // Grille Accueil
+        // Chargement de la grille "Gros événements"
         if (typeof baseDeDonnees !== 'undefined') {
             const grid = document.getElementById('gridShows');
-            let htmlG = "";
+            let htmlGrid = "";
             baseDeDonnees.forEach(a => {
-                if(a.majeurs) { a.majeurs.forEach(m => {
-                    const isBell = m.salle.toLowerCase().includes("bell");
-                    htmlG += `<div class="auto-card ${isBell ? 'bell' : ''}">
-                        <div class="auto-artist">${a.nom}</div>
-                        <div class="auto-date">${m.date}</div>
-                        <div class="auto-venue">${m.salle}</div>
-                    </div>`;
-                });}
+                if(a.majeurs) {
+                    a.majeurs.forEach(m => {
+                        const isBell = m.salle.toLowerCase().includes("bell");
+                        htmlGrid += `
+                            <div class="auto-card ${isBell ? 'bell' : ''}">
+                                <div class="auto-artist">${a.nom}</div>
+                                <div class="auto-date">${m.date}</div>
+                                <div class="auto-venue">${m.salle}</div>
+                            </div>`;
+                    });
+                }
             });
-            grid.innerHTML = htmlG;
+            grid.innerHTML = htmlGrid;
         }
     }
 
-    function enleverAccents(t) { return t.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+    function enleverAccents(t) { 
+        return t.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); 
+    }
 
     function recherche() {
         const queryBrut = document.getElementById('searchBar').value.trim();
         const q = enleverAccents(queryBrut.toLowerCase());
         const res = document.getElementById('resultArea');
-        if (q.length < 2) { res.style.display = 'none'; return; }
         
-        if (typeof baseDeDonnees !== 'undefined') {
-            const a = baseDeDonnees.find(art => enleverAccents(art.nom.toLowerCase()).includes(q));
-            if (a) {
-                res.style.display = 'block';
-                let h = `<div class="artist-name">${a.nom}</div>`;
-                if(a.prochains && a.prochains.length > 0) {
-                    h += `<div class="section-title">📅 Spectacles locaux</div>`;
-                    a.prochains.forEach(s => h += `<div class="show-card"><b>${s.date}</b><br>${s.salle}</div>`);
-                }
-                if(a.majeurs && a.majeurs.length > 0) {
-                    h += `<div class="section-title">⭐ Événements majeurs</div>`;
-                    a.majeurs.forEach(s => h += `<div class="show-card highlight"><b>${s.date}</b><br>${s.salle}</div>`);
-                }
-                const n = encodeURIComponent(a.nom);
-                h += `<div class="btn-container">
-                        <a href="https://www.ticketmaster.ca/search?q=${n}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets</a>
-                        <a href="https://www.google.com/search?q=billets+${n}+Québec" target="_blank" class="btn-action btn-google">🔍 Google</a>
-                        <a href="https://news.google.com/search?q=${n}&hl=fr-CA" target="_blank" class="btn-action btn-news">📰 Actus</a>
-                    </div>`;
-                res.innerHTML = h;
-            } else { res.innerHTML = `<p style="text-align:center; color:#d32f2f; margin-top:20px;">Aucun artiste trouvé.</p>`; }
+        if (q.length < 2) { 
+            res.style.display = 'none'; 
+            return; 
+        }
+        
+        if (typeof baseDeDonnees === 'undefined') {
+            res.style.display = 'block';
+            res.innerHTML = `<p style="color:red; text-align:center; font-weight:bold;">⚠️ Le fichier spectacles.js est introuvable ou contient une erreur.</p>`;
+            return;
+        }
+
+        const artiste = baseDeDonnees.find(art => enleverAccents(art.nom.toLowerCase()).includes(q));
+
+        if (artiste) {
+            res.style.display = 'block';
+            let h = `<div class="artist-name">${artiste.nom}</div>`;
+            
+            if(artiste.prochains && artiste.prochains.length > 0) {
+                h += `<div class="section-title">📅 Prochaines dates</div>`;
+                artiste.prochains.forEach(s => h += `<div class="show-card"><b>${s.date}</b><br>${s.salle}</div>`);
+            }
+            
+            if(artiste.majeurs && artiste.majeurs.length > 0) {
+                h += `<div class="section-title">⭐ Événement majeur</div>`;
+                artiste.majeurs.forEach(s => h += `<div class="show-card highlight"><b>${s.date}</b><br>${s.salle}</div>`);
+            }
+
+            const n = encodeURIComponent(artiste.nom);
+            h += `
+                <div class="btn-container">
+                    <a href="https://www.ticketmaster.ca/search?q=${n}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets</a>
+                    <a href="https://www.google.com/search?q=billets+spectacle+${n}+Québec" target="_blank" class="btn-action btn-google">🔍 Google</a>
+                    <a href="https://news.google.com/search?q=${n}&hl=fr-CA&gl=CA&ceid=CA:fr" target="_blank" class="btn-action btn-news">📰 Actualités</a>
+                </div>`;
+            res.innerHTML = h;
+        } else {
+            res.innerHTML = `<p style="text-align:center; color:#d32f2f; margin-top:20px;">Aucun artiste trouvé pour "${queryBrut}".</p>`;
         }
     }
 </script>
