@@ -7,48 +7,62 @@
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eef2f5; padding: 20px; margin: 0; color: #333; }
         
-        /* --- CONNEXION --- */
+        /* --- ÉCRAN DE CONNEXION --- */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #d32f2f; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: 0.5s; }
         .login-box { background: rgba(0,0,0,0.1); padding: 40px; border-radius: 15px; text-align: center; width: 320px; }
         #passInput { width: 100%; padding: 15px; font-size: 18px; border: none; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; text-align: center; outline: none; }
-        #btnEntrer { background: white; color: #d32f2f; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; }
+        #btnEntrer { background: white; color: #d32f2f; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.2s; }
+        #btnEntrer:hover { background: #f0f0f0; transform: scale(1.02); }
 
-        /* --- LAYOUT --- */
-        .dashboard-layout { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1300px; margin: 0 auto; }
+        /* --- LAYOUT PRINCIPAL --- */
+        .dashboard-layout { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1300px; margin: 0 auto; align-items: flex-start; }
         
-        .priorities-panel { flex: 1 1 350px; background: #d32f2f; padding: 30px; border-radius: 15px; color: white; min-height: 80vh; }
-        .priority-main-title { font-size: 1.4em; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px; margin-bottom: 20px; }
-        .day-title { font-size: 1em; font-weight: 900; text-transform: uppercase; margin-top: 25px; margin-bottom: 10px; }
-        .priority-item { background: rgba(255,255,255,0.15); padding: 15px; margin-bottom: 10px; border-radius: 10px; font-weight: 600; }
+        /* --- COLONNE GAUCHE (Priorités) --- */
+        .priorities-panel { flex: 1 1 350px; background: #d32f2f; padding: 30px; border-radius: 15px; color: white; min-height: 85vh; box-shadow: 0 4px 15px rgba(211,47,47,0.3); }
+        .priority-main-title { font-size: 1.4em; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .day-title { font-size: 1em; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; color: #fff; margin-top: 25px;}
+        .day-title:first-of-type { margin-top: 0; }
+        .priority-item { background: rgba(255,255,255,0.15); padding: 15px; margin-bottom: 12px; border-radius: 10px; font-size: 1.05em; font-weight: 600; line-height: 1.4; }
 
+        /* --- COLONNE DROITE --- */
         .shows-panel { flex: 2 1 600px; display: flex; flex-direction: column; gap: 20px; }
-        .search-box { background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { text-transform: uppercase; font-weight: 900; margin: 0; }
-        .slogan { color: #d32f2f; font-weight: bold; font-style: italic; margin: 5px 0 20px 0; }
+        
+        .search-box { background: white; padding: 35px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;}
+        h1 { color: #000; margin: 0; font-size: 1.9em; text-transform: uppercase; font-weight: 900; letter-spacing: -0.5px; }
+        .slogan { color: #d32f2f; font-weight: bold; font-style: italic; font-size: 1.1em; margin-top: 5px; margin-bottom: 5px; }
+        .ia-warning { font-size: 0.85em; color: #888; font-style: italic; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 0; margin-bottom: 30px; }
 
-        /* BARRE DE RECHERCHE ARRONDIE */
-        input#searchBar { width: 100%; padding: 18px 30px; font-size: 17px; border: 2px solid #eee; border-radius: 50px; outline: none; background: #fcfcfc; }
-        input#searchBar:focus { border-color: #d32f2f; background: #fff; }
+        /* Barre de recherche arrondie (50px) */
+        input#searchBar { width: 100%; padding: 18px 30px; font-size: 17px; border: 2px solid #e8e8e8; border-radius: 50px; outline: none; box-sizing: border-box; transition: 0.3s; background-color: #fcfcfc; }
+        input#searchBar:focus { border-color: #d32f2f; background-color: #fff; box-shadow: 0 0 12px rgba(211,47,47,0.1); }
+        
+        /* Résultats de Recherche */
+        #resultArea { text-align: left; background: #fff; padding: 25px; border-radius: 12px; border: 1px solid #eee; display: none; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .artist-name { font-size: 2em; font-weight: 900; color: #000; border-bottom: 5px solid #d32f2f; margin-bottom: 20px; padding-bottom: 10px; text-transform: uppercase; }
+        .section-title { font-size: 0.9em; text-transform: uppercase; color: #777; margin-top: 20px; margin-bottom: 12px; font-weight: bold; border-left: 4px solid #d32f2f; padding-left: 10px; }
+        .show-card { background: #f9f9f9; border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid #ccc; }
+        .highlight { border-left-color: #fbc02d; background: #fffde7; }
 
-        #resultArea { text-align: left; background: #fff; padding: 25px; border-radius: 12px; border: 1px solid #eee; display: none; margin-top: 20px; }
-        .artist-name { font-size: 1.8em; font-weight: 900; border-bottom: 5px solid #d32f2f; padding-bottom: 5px; margin-bottom: 15px; text-transform: uppercase; }
+        /* Boutons Actions */
+        .btn-container { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-action { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; text-align: center; border-radius: 10px; text-decoration: none; font-weight: 800; font-size: 0.9em; border: 2px solid transparent; transition: 0.2s; }
+        .btn-ticketmaster { background-color: #fff; color: #d32f2f; border-color: #d32f2f; }
+        .btn-ticketmaster:hover { background-color: #d32f2f; color: #fff; }
+        .btn-google { background-color: #4285F4; color: white; }
+        .btn-news { background-color: #f1f3f4; color: #3c4043; border-color: #dadce0; }
 
-        /* BOUTONS */
-        .btn-container { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-action { flex: 1; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.9em; border: 2px solid transparent; }
-        .btn-ticketmaster { background: #fff; color: #d32f2f; border-color: #d32f2f; }
-        .btn-google { background: #4285F4; color: white; }
-        .btn-news { background: #f1f3f4; color: #3c4043; border-color: #dadce0; }
+        /* Gros Événements */
+        .shows-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .box-title { font-size: 1.35em; font-weight: 900; color: #000; border-bottom: 2px solid #000; margin-bottom: 20px; padding-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+        .grid-shows { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .auto-card { background: #fcfcfc; padding: 18px; border-radius: 10px; border: 1px solid #f0f0f0; border-left: 5px solid #d32f2f; }
+        .auto-card.bell { border-left-color: #fbc02d; background: #fffde7; border-color: #fff9c4; }
+        .auto-artist { font-weight: 900; color: #000; font-size: 1.1em; text-transform: uppercase; margin-bottom: 5px; }
+        .auto-date { font-weight: 700; color: #d32f2f; font-size: 0.9em; }
+        .auto-card.bell .auto-date { color: #ef6c00; }
+        .auto-venue { font-size: 0.85em; color: #777; margin-top: 5px; }
 
-        /* GRILLE GROS SHOWS */
-        .shows-box { background: white; padding: 30px; border-radius: 15px; }
-        .grid-shows { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        .auto-card { padding: 15px; border-radius: 10px; border-left: 5px solid #d32f2f; background: #fcfcfc; border: 1px solid #f0f0f0; border-left: 5px solid #d32f2f; }
-        .auto-card.bell { border-left-color: #fbc02d; background: #fffde7; }
-        .auto-artist { font-weight: 900; text-transform: uppercase; }
-        .auto-date { color: #d32f2f; font-weight: bold; font-size: 0.9em; }
-
-        @media (max-width: 800px) { .grid-shows { grid-template-columns: 1fr; } .btn-container { flex-direction: column; } }
+        @media (max-width: 900px) { .grid-shows { grid-template-columns: 1fr; } .btn-container { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -56,6 +70,7 @@
 <div id="login-screen">
     <div class="login-box">
         <img src="https://upload.wikimedia.org/wikipedia/fr/a/a2/Rouge_FM_%28logo%29.svg" alt="Rouge FM" style="height:60px; margin-bottom:20px;">
+        <h2 style="text-transform: uppercase; letter-spacing: 1px; color:white; font-size: 1.2em; margin-bottom: 20px;">Accès Studio</h2>
         <input type="password" id="passInput" placeholder="Mot de passe..." onkeypress="if(event.key === 'Enter') verifier()">
         <button id="btnEntrer" onclick="verifier()">DÉVERROUILLER</button>
     </div>
@@ -71,11 +86,13 @@
         <div class="search-box">
             <h1>Calendrier des spectacles</h1>
             <p class="slogan">Toujours un hit</p>
-            <input type="text" id="searchBar" placeholder="Rechercher un artiste..." onkeyup="recherche()">
+            <p class="ia-warning">⚠️ Attention, ce tableau est généré par l'IA.</p>
+            <input type="text" id="searchBar" placeholder="Rechercher un artiste de notre répertoire..." onkeyup="recherche()">
             <div id="resultArea"></div>
         </div>
+
         <div class="shows-box">
-            <h2 style="text-transform:uppercase; border-bottom:2px solid #000; padding-bottom:10px;">🎟️ Gros événements</h2>
+            <h2 class="box-title">🎟️ Gros événements à venir</h2>
             <div class="grid-shows" id="gridShows"></div>
         </div>
     </div>
@@ -85,58 +102,87 @@
 <script src="spectacles.js"></script>
 
 <script>
+    const PWD = "Toujoursunhit2026";
+
     function verifier() {
-        if(document.getElementById('passInput').value === "Toujoursunhit2026") {
+        if(document.getElementById('passInput').value === PWD) {
             document.getElementById('login-screen').style.display = 'none';
+            localStorage.setItem('rouge_session', 'vrai');
             initialiser();
         }
     }
 
-    function initialiser() {
-        // Priorités
-        const cont = document.getElementById('prioritesContainer');
-        const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-        const d = new Date();
-        const indices = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
-        const labels = ["Aujourd'hui", "Demain", "À venir"];
-        let hP = "";
-        indices.forEach((idx, i) => {
-            hP += `<div class="day-title">${labels[i]} (${jours[idx]})</div>`;
-            (prioritesSemaine[jours[idx]] || []).forEach(p => hP += `<div class="priority-item">${p}</div>`);
-        });
-        cont.innerHTML = hP;
-
-        // Gros Shows
-        const g = document.getElementById('gridShows');
-        let hG = "";
-        baseDeDonnees.forEach(a => {
-            (a.majeurs || []).forEach(m => {
-                hG += `<div class="auto-card ${m.salle.toLowerCase().includes('bell')?'bell':''}">
-                    <div class="auto-artist">${a.nom}</div>
-                    <div class="auto-date">${m.date}</div>
-                    <div class="auto-venue">${m.salle}</div>
-                </div>`;
-            });
-        });
-        g.innerHTML = hG;
+    if(localStorage.getItem('rouge_session') === 'vrai') {
+        document.getElementById('login-screen').style.display = 'none';
+        window.onload = initialiser;
     }
 
+    function initialiser() {
+        // Priorités
+        if (typeof prioritesSemaine !== 'undefined') {
+            const cont = document.getElementById('prioritesContainer');
+            const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+            const d = new Date();
+            const indices = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
+            const labels = ["Aujourd'hui", "Demain", "À venir"];
+            let htmlP = "";
+            indices.forEach((idx, i) => {
+                const j = jours[idx];
+                htmlP += `<div class="day-title">${labels[i]} (${j})</div>`;
+                const list = prioritesSemaine[j] || [];
+                if(list.length > 0) { list.forEach(p => htmlP += `<div class="priority-item">${p}</div>`); }
+                else { htmlP += `<p style="opacity:0.6; font-style:italic;">Rien à signaler.</p>`; }
+            });
+            cont.innerHTML = htmlP;
+        }
+
+        // Grille Accueil
+        if (typeof baseDeDonnees !== 'undefined') {
+            const grid = document.getElementById('gridShows');
+            let htmlG = "";
+            baseDeDonnees.forEach(a => {
+                if(a.majeurs) { a.majeurs.forEach(m => {
+                    const isBell = m.salle.toLowerCase().includes("bell");
+                    htmlG += `<div class="auto-card ${isBell ? 'bell' : ''}">
+                        <div class="auto-artist">${a.nom}</div>
+                        <div class="auto-date">${m.date}</div>
+                        <div class="auto-venue">${m.salle}</div>
+                    </div>`;
+                });}
+            });
+            grid.innerHTML = htmlG;
+        }
+    }
+
+    function enleverAccents(t) { return t.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+
     function recherche() {
-        const q = document.getElementById('searchBar').value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const queryBrut = document.getElementById('searchBar').value.trim();
+        const q = enleverAccents(queryBrut.toLowerCase());
         const res = document.getElementById('resultArea');
-        if(q.length < 2) { res.style.display='none'; return; }
-        const a = baseDeDonnees.find(art => art.nom.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(q));
-        if(a) {
-            res.style.display='block';
-            let h = `<div class="artist-name">${a.nom}</div>`;
-            (a.prochains || []).forEach(s => h += `<div style="margin-bottom:10px;"><b>${s.date}</b><br>${s.salle}</div>`);
-            const n = encodeURIComponent(a.nom);
-            h += `<div class="btn-container">
-                <a href="https://www.ticketmaster.ca/search?q=${n}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets</a>
-                <a href="https://www.google.com/search?q=${n}+concert+Québec" target="_blank" class="btn-action btn-google">🔍 Google</a>
-                <a href="https://news.google.com/search?q=${n}&hl=fr-CA" target="_blank" class="btn-action btn-news">📰 Actus</a>
-            </div>`;
-            res.innerHTML = h;
+        if (q.length < 2) { res.style.display = 'none'; return; }
+        
+        if (typeof baseDeDonnees !== 'undefined') {
+            const a = baseDeDonnees.find(art => enleverAccents(art.nom.toLowerCase()).includes(q));
+            if (a) {
+                res.style.display = 'block';
+                let h = `<div class="artist-name">${a.nom}</div>`;
+                if(a.prochains && a.prochains.length > 0) {
+                    h += `<div class="section-title">📅 Spectacles locaux</div>`;
+                    a.prochains.forEach(s => h += `<div class="show-card"><b>${s.date}</b><br>${s.salle}</div>`);
+                }
+                if(a.majeurs && a.majeurs.length > 0) {
+                    h += `<div class="section-title">⭐ Événements majeurs</div>`;
+                    a.majeurs.forEach(s => h += `<div class="show-card highlight"><b>${s.date}</b><br>${s.salle}</div>`);
+                }
+                const n = encodeURIComponent(a.nom);
+                h += `<div class="btn-container">
+                        <a href="https://www.ticketmaster.ca/search?q=${n}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets</a>
+                        <a href="https://www.google.com/search?q=billets+${n}+Québec" target="_blank" class="btn-action btn-google">🔍 Google</a>
+                        <a href="https://news.google.com/search?q=${n}&hl=fr-CA" target="_blank" class="btn-action btn-news">📰 Actus</a>
+                    </div>`;
+                res.innerHTML = h;
+            } else { res.innerHTML = `<p style="text-align:center; color:#d32f2f; margin-top:20px;">Aucun artiste trouvé.</p>`; }
         }
     }
 </script>
