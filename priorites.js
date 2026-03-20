@@ -16,7 +16,7 @@ const prioritesSemaine = {
         "Annonce : Tête d'affiche d'Osheaga dévoilée"
     ],
     "jeudi": [
-        "C'est le Jeudi Rétro !",
+        "C'est 1 à 1",
         "N'oubliez pas de plugger le show des Trois Accords",
         "Mise en vente : Lady Gaga au Centre Bell"
     ],
