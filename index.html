@@ -15,42 +15,43 @@
         #passInput { width: 100%; padding: 15px; font-size: 18px; margin-top: 20px; border: none; border-radius: 8px; text-align: center; outline: none; }
         #btnEntrer { margin-top: 20px; padding: 12px 30px; font-size: 16px; font-weight: bold; color: #d32f2f; background: white; border: none; border-radius: 8px; cursor: pointer; }
 
-        /* --- CONTENEUR PRINCIPAL (UNE SEULE COLONNE ÉPURÉE) --- */
+        /* --- CONTENEUR PRINCIPAL ÉPURÉ (COMME TA CAPTURE) --- */
         #main-content { display: none; max-width: 850px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        .header { text-align: center; margin-bottom: 35px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
-        .header img { height: 45px; margin-bottom: 10px; }
+        .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+        .header img { height: 50px; margin-bottom: 10px; }
         .header h1 { margin: 0; font-size: 26px; color: #333; }
 
-        /* --- SECTION PRIORITÉS --- */
-        .section-priorites { margin-bottom: 40px; }
-        .section-priorites h2 { color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; font-size: 22px; margin-top: 0; text-transform: capitalize; }
+        /* --- TITRES ROUGES ÉPURÉS --- */
+        h2 { color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; font-size: 22px; margin-top: 0; margin-bottom: 20px; text-transform: capitalize; }
+
+        /* --- LISTE DES PRIORITÉS --- */
+        .section-priorites { margin-bottom: 50px; }
         .priority-list { list-style: none; padding: 0; margin: 0; }
-        .priority-list li { background: #fdf2f2; padding: 15px; margin-top: 10px; border-radius: 8px; border-left: 4px solid #d32f2f; font-size: 16px; line-height: 1.4; }
+        .priority-list li { padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 16px; line-height: 1.5; }
+        .priority-list li:last-child { border-bottom: none; }
+        .puce { font-weight: bold; margin-right: 8px; }
 
         /* --- SECTION RECHERCHE --- */
-        .section-recherche h2 { color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; font-size: 22px; margin-top: 0; }
-        #searchInput { width: 100%; padding: 16px; font-size: 18px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; outline: none; margin-top: 10px; margin-bottom: 20px; transition: 0.2s; }
-        #searchInput:focus { border-color: #d32f2f; }
+        #searchInput { width: 100%; padding: 16px; font-size: 18px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; outline: none; margin-bottom: 20px; transition: 0.2s; }
+        #searchInput:focus { border-color: #d32f2f; box-shadow: 0 0 5px rgba(211, 47, 47, 0.3); }
         
         /* --- RÉSULTATS DE RECHERCHE --- */
-        .result-box { padding: 20px; border-radius: 8px; background: #f9f9f9; min-height: 120px; border: 1px solid #eee; }
+        #resultContainer { min-height: 100px; }
         .result-box h3 { margin-top: 0; color: #333; font-size: 24px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
         
-        .info-card { background: #e3f2fd; padding: 12px; border-radius: 6px; border-left: 4px solid #2196f3; margin-bottom: 20px; font-size: 15px; color: #0d47a1; }
+        .info-card { display: inline-block; background: #e3f2fd; color: #0d47a1; font-size: 14px; padding: 6px 12px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; }
         
         .section-title { font-weight: bold; color: #888; margin: 20px 0 10px 0; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; }
         
-        .show-card { background: white; padding: 15px; border-radius: 6px; border: 1px solid #e0e0e0; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .show-card.highlight { border-left: 4px solid #ff9800; background: #fffcf5; }
+        .show-card { padding: 12px 0; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 4px; }
+        .show-card:last-child { border-bottom: none; }
         .show-date { font-weight: bold; color: #d32f2f; font-size: 16px; }
-        .show-venue { color: #555; font-size: 16px; }
+        .show-venue { color: #333; font-size: 15px; }
 
         .btn-container { display: flex; gap: 15px; margin-top: 30px; }
-        .btn-action { flex: 1; padding: 14px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 15px; transition: 0.2s; }
-        .btn-ticketmaster { background: #026cdf; color: white; }
-        .btn-google { background: #fff; color: #333; border: 1px solid #ccc; }
-        .btn-action:hover { opacity: 0.9; }
+        .btn-action { flex: 1; padding: 12px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 15px; border: 1px solid #ddd; color: #333; background: #fafafa; }
+        .btn-action:hover { background: #f0f0f0; }
     </style>
 </head>
 <body>
@@ -79,7 +80,7 @@
             <h2>🔍 Recherche Artiste</h2>
             <input type="text" id="searchInput" placeholder="Tapez un nom d'artiste (ex: Charlotte Cardin)..." autocomplete="off">
             
-            <div class="result-box" id="resultContainer">
+            <div id="resultContainer">
                 <p style="color:#888; text-align:center; margin-top:30px; font-size: 16px;">Commencez à taper un nom pour voir les infos et les spectacles.</p>
             </div>
         </div>
@@ -107,6 +108,7 @@
             }
         }
 
+        // --- AFFICHAGE DES PRIORITÉS ---
         function chargerPriorites() {
             const container = document.getElementById('priorityContainer');
             container.innerHTML = "";
@@ -119,7 +121,7 @@
             if (typeof prioritesSemaine !== 'undefined' && prioritesSemaine[jourActuel]) {
                 prioritesSemaine[jourActuel].forEach(texte => {
                     let li = document.createElement("li");
-                    li.innerHTML = texte;
+                    li.innerHTML = `<span class="puce">•</span> ${texte}`;
                     container.appendChild(li);
                 });
             } else {
@@ -127,6 +129,7 @@
             }
         }
 
+        // --- MOTEUR DE RECHERCHE ---
         function enleverAccents(str) {
             return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         }
@@ -140,21 +143,21 @@
                 return;
             }
 
-            // Gère le nom de ta variable dans spectacles.js (baseArtistes ou baseDeDonnees)
-            const dataBase = typeof baseArtistes !== 'undefined' ? baseArtistes : (typeof baseDeDonnees !== 'undefined' ? baseDeDonnees : null);
+            // CORRECTION CRUCIALE : On vérifie les deux noms de variables possibles
+            const dataBase = typeof baseDeDonnees !== 'undefined' ? baseDeDonnees : (typeof baseArtistes !== 'undefined' ? baseArtistes : null);
 
             if (!dataBase) {
-                resultDiv.innerHTML = `<p style="color:red; text-align:center;">Erreur: Impossible de lire le fichier spectacles.js.</p>`;
+                resultDiv.innerHTML = `<p style="color:red; text-align:center;">Erreur technique: Le fichier spectacles.js n'est pas lié correctement.</p>`;
                 return;
             }
 
             const artisteTrouve = dataBase.find(a => enleverAccents(a.nom).includes(query));
 
             if (artisteTrouve) {
-                let html = `<h3>${artisteTrouve.nom}</h3>`;
+                let html = `<div class="result-box"><h3>${artisteTrouve.nom}</h3>`;
                 
                 if (artisteTrouve.info && artisteTrouve.info.trim() !== "") {
-                    html += `<div class="info-card">🎙️ <b>Info Rouge :</b> ${artisteTrouve.info}</div>`;
+                    html += `<div class="info-card">🎙️ ${artisteTrouve.info}</div>`;
                 }
 
                 const showsLocaux = artisteTrouve.prochains || [];
@@ -162,25 +165,27 @@
 
                 if (showsLocaux.length > 0) {
                     html += `<div class="section-title">📍 En région / Locaux</div>`;
-                    showsLocaux.forEach(show => { html += `<div class="show-card"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; });
+                    showsLocaux.forEach(show => { 
+                        html += `<div class="show-card"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; 
+                    });
                 } else if (showsMajeurs.length === 0) {
                     html += `<p style="color:#888; font-style:italic; margin: 20px 0;">Aucune date confirmée au système.</p>`;
                 }
 
                 if (showsMajeurs.length > 0) {
                     html += `<div class="section-title">⭐ Événements majeurs</div>`;
-                    showsMajeurs.forEach(show => { html += `<div class="show-card highlight"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; });
+                    showsMajeurs.forEach(show => { 
+                        html += `<div class="show-card"><div class="show-date">${show.date}</div><div class="show-venue">${show.salle}</div></div>`; 
+                    });
                 }
 
-                const nomPourTicketmaster = encodeURIComponent(enleverAccents(artisteTrouve.nom));
-                const nomPourGoogle = encodeURIComponent(artisteTrouve.nom);
-                
+                const nomPourRecherche = encodeURIComponent(artisteTrouve.nom);
                 html += `
                     <div class="btn-container">
-                        <a href="https://www.ticketmaster.ca/search?q=${nomPourTicketmaster}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets</a>
-                        <a href="https://www.google.com/search?q=billets+spectacle+${nomPourGoogle}+Montréal+Québec" target="_blank" class="btn-action btn-google">🔍 Google</a>
+                        <a href="https://www.ticketmaster.ca/search?q=${nomPourRecherche}" target="_blank" class="btn-action">🎟️ Ticketmaster</a>
+                        <a href="https://www.google.com/search?q=billets+spectacle+${nomPourRecherche}+Montréal+Québec" target="_blank" class="btn-action">🔍 Google</a>
                     </div>
-                `;
+                </div>`;
                 resultDiv.innerHTML = html;
             } else {
                 resultDiv.innerHTML = `<p style="color:#d32f2f; text-align:center; margin-top:30px;">Aucun artiste trouvé pour "${e.target.value}".</p>`;
