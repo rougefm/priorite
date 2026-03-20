@@ -33,7 +33,7 @@
         #btnEntrer { background: white; color: var(--rouge-rouge); border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.2s;}
         #btnEntrer:hover { background: #f0f0f0; transform: scale(1.02); }
 
-        /* --- SIDEBAR GAUCHE --- */
+        /* --- SIDEBAR GAUCHE (PRIORITÉS) --- */
         .sidebar { 
             width: 350px; 
             background: var(--rouge-rouge); 
@@ -72,6 +72,18 @@
             padding: 35px; 
             border-radius: 20px; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+        }
+
+        /* JOURNÉES MONDIALES (STYLE SPÉCIAL) */
+        .world-day-item {
+            background: #f0f7ff;
+            color: #0d47a1;
+            padding: 12px 18px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            border-left: 5px solid #2196f3;
+            font-size: 0.95em;
         }
 
         /* RECHERCHE */
@@ -142,6 +154,18 @@
 </div>
 
 <div class="main-content">
+    
+    <!-- NOUVELLE SECTION : JOURNÉES MONDIALES -->
+    <div class="white-card">
+        <h2 style="text-transform: uppercase; font-weight: 900; margin: 0; font-size: 1.1em; display: flex; align-items: center; gap: 10px;">
+            🌍 Journées Internationales
+        </h2>
+        <div style="height: 1px; background: #eee; margin: 15px 0;"></div>
+        <div id="journeesContainer" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Rempli par journees.js -->
+        </div>
+    </div>
+
     <div class="white-card">
         <div class="search-header">
             <h1>Calendrier des spectacles</h1>
@@ -163,6 +187,7 @@
 
 <script src="priorites.js"></script>
 <script src="spectacles.js"></script>
+<script src="journees.js"></script>
 
 <script>
     const MOT_DE_PASSE_STUDIO = "Toujoursunhit2026";
@@ -190,10 +215,6 @@
         }
     }
 
-    /**
-     * Convertit une date textuelle française (ex: "2, 3 et 6 Avril 2026") en objet Date utilisable pour le tri.
-     * Prend le dernier jour mentionné dans la chaîne pour le tri.
-     */
     function parseRougeDate(str) {
         const moisMap = {
             "janvier": 0, "fevrier": 1, "mars": 2, "avril": 3, "mai": 4, "juin": 5,
@@ -202,72 +223,69 @@
         const s = str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const yearMatch = s.match(/\d{4}/);
         const year = yearMatch ? parseInt(yearMatch[0]) : new Date().getFullYear();
-        
         let month = 0;
-        for (let m in moisMap) {
-            if (s.includes(m)) { month = moisMap[m]; break; }
-        }
-
+        for (let m in moisMap) { if (s.includes(m)) { month = moisMap[m]; break; } }
         const days = s.match(/\d+/g);
-        // On prend le dernier chiffre (qui n'est pas l'année) comme jour de fin de l'événement
         let day = 1;
         if (days) {
             const filteredDays = days.filter(d => d.length < 3);
             if (filteredDays.length > 0) day = parseInt(filteredDays[filteredDays.length - 1]);
         }
-
         return new Date(year, month, day);
     }
 
     function initialiserContenu() {
-        // 1. Priorités
+        const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+        const d = new Date();
+        const sequence = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
+        const labels = ["Aujourd'hui", "Demain", "À venir"];
+
+        // 1. Priorités (Sidebar)
         const contPrio = document.getElementById('prioritesContainer');
         if (typeof prioritesSemaine !== 'undefined') {
-            const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-            const d = new Date();
-            const sequence = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
-            const labels = ["Aujourd'hui", "Demain", "À venir"];
             let htmlP = "";
             sequence.forEach((idx, i) => {
                 const nomJ = jours[idx];
                 htmlP += `<div class="day-title">${labels[i]} (${nomJ.toUpperCase()})</div>`;
                 const list = prioritesSemaine[nomJ] || [];
-                if(list.length > 0) {
-                    list.forEach(p => htmlP += `<div class="priority-item">${p}</div>`);
-                } else {
-                    htmlP += `<p style="opacity:0.5; font-style:italic; font-size:0.9em;">Rien à l'agenda.</p>`;
-                }
+                if(list.length > 0) { list.forEach(p => htmlP += `<div class="priority-item">${p}</div>`); }
+                else { htmlP += `<p style="opacity:0.5; font-style:italic; font-size:0.9em;">Rien à l'agenda.</p>`; }
             });
             contPrio.innerHTML = htmlP;
         }
 
-        // 2. Grille d'accueil Dynamique et Chronologique
+        // 2. Journées Mondiales (Main Content)
+        const contJournees = document.getElementById('journeesContainer');
+        if (typeof journeesMondiales !== 'undefined') {
+            let htmlJ = "";
+            sequence.forEach((idx, i) => {
+                const nomJ = jours[idx];
+                const list = journeesMondiales[nomJ] || [];
+                if(list.length > 0) {
+                    htmlJ += `<div style="font-weight:900; font-size:0.8em; color:#666; text-transform:uppercase; margin-top:5px;">${labels[i]}</div>`;
+                    list.forEach(j => htmlJ += `<div class="world-day-item">${j}</div>`);
+                }
+            });
+            contJournees.innerHTML = htmlJ || "<p style='color:#999'>Aucune journée spéciale répertoriée.</p>";
+        }
+
+        // 3. Grille d'accueil
         const grid = document.getElementById('homeGrid');
         if (typeof baseDeDonnees !== 'undefined') {
             const today = new Date();
             today.setHours(0,0,0,0);
-
             let allMajeurs = [];
             baseDeDonnees.forEach(a => {
                 if(a.majeurs && a.majeurs.length > 0) {
                     a.majeurs.forEach(m => {
                         const dateObj = parseRougeDate(m.date);
-                        // On ne garde que ce qui n'est pas passé
                         if (dateObj >= today) {
-                            allMajeurs.push({
-                                artist: a.nom,
-                                date: m.date,
-                                salle: m.salle,
-                                dateObj: dateObj
-                            });
+                            allMajeurs.push({ artist: a.nom, date: m.date, salle: m.salle, dateObj: dateObj });
                         }
                     });
                 }
             });
-
-            // Tri chronologique (du plus proche au plus lointain)
             allMajeurs.sort((a, b) => a.dateObj - b.dateObj);
-
             let htmlG = "";
             allMajeurs.forEach(item => {
                 const isBell = item.salle.toLowerCase().includes("bell");
@@ -290,30 +308,22 @@
         const res = document.getElementById('resultArea');
         if (q.length < 2) { res.style.display = 'none'; return; }
         if (typeof baseDeDonnees === 'undefined') return;
-
         const artiste = baseDeDonnees.find(art => clean(art.nom).includes(q));
         if (artiste) {
             res.style.display = 'block';
             let h = `<div class="artist-title">${artiste.nom}</div>`;
-            
             const today = new Date();
             today.setHours(0,0,0,0);
-
             const shows = [...(artiste.prochains || []), ...(artiste.majeurs || [])];
-            // Filtrer les dates passées dans la recherche aussi pour être cohérent
             const upcoming = shows.filter(s => parseRougeDate(s.date) >= today);
             upcoming.sort((a, b) => parseRougeDate(a.date) - parseRougeDate(b.date));
-
             if(upcoming.length > 0) {
                 h += `<div class="section-label">📅 Prochaines dates</div>`;
                 upcoming.forEach(s => {
                     const isMajeur = artiste.majeurs && artiste.majeurs.includes(s);
                     h += `<div class="card ${isMajeur ? 'bell' : ''}"><b>${s.date}</b><span>${s.salle}</span></div>`;
                 });
-            } else {
-                h += `<p style="font-style:italic; color:#888; margin-top:10px;">Aucune date à venir pour cet artiste.</p>`;
-            }
-
+            } else { h += `<p style="font-style:italic; color:#888; margin-top:10px;">Aucune date à venir.</p>`; }
             const enc = encodeURIComponent(artiste.nom);
             h += `<div class="btn-row">
                     <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" class="btn btn-ticket">🎟️ Billets</a>
@@ -321,9 +331,7 @@
                     <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA:fr" target="_blank" class="btn btn-news">📰 Actus</a>
                 </div>`;
             res.innerHTML = h;
-        } else {
-            res.innerHTML = `<p style="text-align:center; color:var(--rouge-rouge); font-weight:bold; margin-top:20px;">Artiste non trouvé.</p>`;
-        }
+        } else { res.innerHTML = `<p style="text-align:center; color:var(--rouge-rouge); font-weight:bold; margin-top:20px;">Artiste non trouvé.</p>`; }
     }
 </script>
 </body>
