@@ -33,9 +33,9 @@
         #passInput { width: 100%; padding: 15px; font-size: 18px; border: none; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; text-align: center; outline: none; }
         #btnEntrer { background: white; color: var(--rouge-rouge); border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; transition: 0.2s;}
 
-        /* --- SIDEBARS --- */
+        /* --- BARRES LATÉRALES (SIDEBARS ROUGES) --- */
         .sidebar { 
-            width: 300px; 
+            width: 320px; 
             background: var(--rouge-rouge); 
             color: white; 
             padding: 25px; 
@@ -67,52 +67,61 @@
         .side-item { 
             background: rgba(255,255,255,0.15); 
             padding: 12px; margin-bottom: 8px; 
-            border-radius: 8px; font-size: 0.95em; font-weight: 600; line-height: 1.4; 
+            border-radius: 10px; font-size: 1em; font-weight: 600; line-height: 1.4; 
         }
 
-        /* --- CONTENU --- */
+        /* --- CONTENU CENTRAL --- */
         .main-content { 
             flex: 1; 
-            padding: 25px; 
+            padding: 30px; 
             display: flex; 
             flex-direction: column; 
-            gap: 20px;
-            min-width: 450px;
+            gap: 25px;
+            min-width: 500px;
         }
 
         .white-card { 
             background: white; 
-            padding: 25px; 
-            border-radius: 15px; 
+            padding: 30px; 
+            border-radius: 20px; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
         }
 
         /* RECHERCHE */
+        .search-header { text-align: center; margin-bottom: 20px; }
+        .search-header h1 { font-size: 1.8em; font-weight: 900; text-transform: uppercase; margin: 0; color: #000; }
+        .search-header .slogan { color: var(--rouge-rouge); font-weight: bold; font-style: italic; font-size: 1.1em; margin: 5px 0; }
+        
         input#searchBar { 
-            width: 100%; padding: 15px 25px; font-size: 16px; 
+            width: 100%; padding: 16px 25px; font-size: 16px; 
             border: 2px solid #f0f0f0; border-radius: 50px; 
             outline: none; box-sizing: border-box; background: #fafafa;
+            transition: 0.2s;
         }
+        input#searchBar:focus { border-color: var(--rouge-rouge); background: #fff; box-shadow: 0 0 10px rgba(211,47,47,0.1); }
+
+        /* RÉSULTATS */
+        #resultArea { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; display: none; }
+        .artist-title { font-size: 1.8em; font-weight: 900; text-transform: uppercase; border-bottom: 5px solid var(--rouge-rouge); padding-bottom: 8px; margin-bottom: 15px; }
+        .section-label { font-size: 0.8em; text-transform: uppercase; color: #888; font-weight: 800; margin: 15px 0 10px 0; border-left: 4px solid var(--rouge-rouge); padding-left: 10px; }
 
         /* GRILLE SPECTACLES */
-        .grid-shows { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 10px; }
+        .grid-shows { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; margin-top: 15px; }
         .card { 
-            background: #fcfcfc; padding: 12px; border-radius: 10px; 
-            border: 1px solid #f0f0f0; border-left: 5px solid var(--rouge-rouge); 
-            display: flex; flex-direction: column; gap: 3px;
+            background: #fcfcfc; padding: 15px; border-radius: 12px; 
+            border: 1px solid #f0f0f0; border-left: 6px solid var(--rouge-rouge); 
+            display: flex; flex-direction: column; gap: 4px;
         }
         .card.bell { border-left-color: #fbc02d; background: #fffdf2; }
-        .card-artist { font-weight: 900; font-size: 1em; text-transform: uppercase; }
+        .card-artist { font-weight: 900; font-size: 1.05em; text-transform: uppercase; color: #000; }
+        .card-date { font-weight: 700; color: var(--rouge-rouge); font-size: 0.9em; }
+        .card.bell .card-date { color: #ef6c00; }
+        .card-venue { font-size: 0.8em; color: #666; }
 
-        .btn-row { display: flex; gap: 8px; margin-top: 20px; }
-        .btn { flex: 1; padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 0.8em; border: 2px solid transparent; }
-        .btn-ticket { border-color: var(--rouge-rouge); color: var(--rouge-rouge); }
-        .btn-google { background: #4285F4; color: white; }
-        .btn-news { background: #f1f3f4; color: #3c4043; border-color: #dadce0; }
-
-        @media (max-width: 1100px) {
-            body { flex-direction: column; overflow-x: hidden; }
+        @media (max-width: 1200px) {
+            body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; position: static; }
+            .main-content { min-width: auto; }
         }
     </style>
 </head>
@@ -120,69 +129,75 @@
 
 <div id="login-screen">
     <div class="login-box">
-        <img src="https://upload.wikimedia.org/wikipedia/fr/a/a2/Rouge_FM_%28logo%29.svg" alt="Rouge FM" style="height:55px; margin-bottom:20px;">
+        <img src="https://upload.wikimedia.org/wikipedia/fr/a/a2/Rouge_FM_%28logo%29.svg" alt="Rouge FM" style="height:60px; margin-bottom:25px;">
         <input type="password" id="passInput" placeholder="Mot de passe..." onkeypress="if(event.key === 'Enter') login()">
         <button id="btnEntrer" onclick="login()">DÉVERROUILLER</button>
     </div>
 </div>
 
+<!-- GAUCHE : PRIORITÉS -->
 <div class="sidebar">
     <h2 class="side-title">🎙️ Priorités</h2>
-    <div id="prioritesContainer"><p style="opacity:0.5; font-style:italic;">Chargement...</p></div>
+    <div id="prioritesContainer"></div>
 </div>
 
+<!-- CENTRE : ACTIONS -->
 <div class="main-content">
     <div class="white-card">
-        <div style="text-align:center; margin-bottom:15px;">
-            <h1 style="font-size:1.7em; font-weight:900; text-transform:uppercase; margin:0;">Calendrier des spectacles</h1>
-            <p style="color:var(--rouge-rouge); font-weight:bold; font-style:italic; font-size:1em; margin:3px 0;">Toujours un hit</p>
+        <div class="search-header">
+            <h1>Calendrier des spectacles</h1>
+            <p class="slogan">Toujours un hit</p>
         </div>
-        <input type="text" id="searchBar" placeholder="Rechercher un artiste..." onkeyup="faireRecherche()">
+        <input type="text" id="searchBar" placeholder="Rechercher un artiste de notre répertoire..." onkeyup="faireRecherche()">
         <div id="resultArea"></div>
     </div>
 
     <div class="white-card">
-        <h2 style="text-transform:uppercase; font-weight:900; margin:0; font-size:1.1em;">🎟️ Événements à venir</h2>
-        <div style="height:1px; background:#eee; margin:15px 0;"></div>
+        <h2 style="text-transform: uppercase; font-weight: 900; margin: 0; font-size: 1.1em; display: flex; align-items: center; gap: 10px;">
+            🎟️ Événements à venir
+        </h2>
+        <div style="height: 1px; background: #eee; margin: 15px 0;"></div>
         <div class="grid-shows" id="homeGrid"></div>
     </div>
 </div>
 
+<!-- DROITE : JOURNÉES -->
 <div class="sidebar">
     <h2 class="side-title">🌍 Journées</h2>
-    <div id="journeesContainer"><p style="opacity:0.5; font-style:italic;">Chargement...</p></div>
+    <div id="journeesContainer"></div>
 </div>
 
+<!-- SCRIPTS EXTERNES -->
 <script src="priorites.js"></script>
 <script src="spectacles.js"></script>
 <script src="journees.js"></script>
 
 <script>
-    const MOT_DE_PASSE_STUDIO = "Toujoursunhit2026";
+    const MOT_DE_PASSE = "Toujoursunhit2026";
 
-    if(localStorage.getItem('rouge_auth_v4') === 'vrai') {
+    if(localStorage.getItem('rouge_auth_v5') === 'vrai') {
         document.getElementById('login-screen').style.display = 'none';
         attendreDonnees();
     }
 
     function login() {
-        if(document.getElementById('passInput').value === MOT_DE_PASSE_STUDIO) {
-            localStorage.setItem('rouge_auth_v4', 'vrai');
+        if(document.getElementById('passInput').value === MOT_DE_PASSE) {
+            localStorage.setItem('rouge_auth_v5', 'vrai');
             document.getElementById('login-screen').style.display = 'none';
             initialiserContenu();
-        } else { alert("Mot de passe incorrect."); }
+        } else { alert("Incorrect."); }
     }
 
     function attendreDonnees() {
-        // On vérifie que TOUS les fichiers sont chargés
-        if (typeof baseDeDonnees !== 'undefined' && typeof prioritesSemaine !== 'undefined' && typeof journeesMondiales !== 'undefined') {
+        // Sécurité : On vérifie que les 3 variables globales sont bien chargées
+        if (typeof prioritesSemaine !== 'undefined' && typeof baseDeDonnees !== 'undefined' && typeof journeesMondiales !== 'undefined') {
             initialiserContenu();
         } else {
             setTimeout(attendreDonnees, 50);
         }
     }
 
-    function parseRougeDate(str) {
+    function parseDate(str) {
         const moisMap = {"janvier":0,"fevrier":1,"mars":2,"avril":3,"mai":4,"juin":5,"juillet":6,"aout":7,"septembre":8,"octobre":9,"novembre":10,"decembre":11};
         const s = str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const year = (s.match(/\d{4}/) || [new Date().getFullYear()])[0];
@@ -204,74 +219,61 @@
 
         // 1. Priorités
         const contPrio = document.getElementById('prioritesContainer');
-        if (contPrio) {
-            const seq = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
-            const labs = ["Aujourd'hui", "Demain", "À venir"];
-            let hP = "";
-            seq.forEach((idx, i) => {
-                const nJ = joursNom[idx];
-                hP += `<div class="day-group-title">${labs[i]} (${nJ.toUpperCase()})</div>`;
-                (prioritesSemaine[nJ] || []).forEach(p => hP += `<div class="side-item">${p}</div>`);
-            });
-            contPrio.innerHTML = hP;
-        }
+        const seqP = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
+        const labsP = ["Aujourd'hui", "Demain", "À venir"];
+        contPrio.innerHTML = seqP.map((idx, i) => `
+            <div class="day-group-title">${labsP[i]} (${joursNom[idx].toUpperCase()})</div>
+            ${(prioritesSemaine[joursNom[idx]] || ["Aucune priorité"]).map(p => `<div class="side-item">${p}</div>`).join('')}
+        `).join('');
 
-        // 2. Journées (Scan pour les 6 prochains évènements)
+        // 2. Journées (Scan auto pour les 6 prochains)
         const contJour = document.getElementById('journeesContainer');
-        if (contJour) {
-            let hJ = "";
-            let found = 0;
-            let offset = 0;
-            while (found < 6 && offset < 365) {
-                const target = new Date();
-                target.setDate(d.getDate() + offset);
-                const key = `${String(target.getDate()).padStart(2,'0')}-${String(target.getMonth()+1).padStart(2,'0')}`;
-                const list = journeesMondiales[key] || [];
-                if (list.length > 0) {
-                    const nJ = joursNom[target.getDay()];
-                    const dA = target.toLocaleDateString('fr-FR', { day:'numeric', month:'long' });
-                    let lab = offset === 0 ? "Aujourd'hui" : (offset === 1 ? "Demain" : nJ);
-                    hJ += `<div class="day-group-title">${lab.toUpperCase()}<br><small style="opacity:0.7">${dA}</small></div>`;
-                    list.forEach(j => { hJ += `<div class="side-item">${j}</div>`; found++; });
-                }
-                offset++;
+        let hJ = ""; let found = 0; let offset = 0;
+        while (found < 6 && offset < 365) {
+            const t = new Date(); t.setDate(d.getDate() + offset);
+            const key = `${String(t.getDate()).padStart(2,'0')}-${String(t.getMonth()+1).padStart(2,'0')}`;
+            const list = journeesMondiales[key] || [];
+            if (list.length > 0) {
+                const dA = t.toLocaleDateString('fr-FR', { day:'numeric', month:'long' });
+                let label = offset === 0 ? "Aujourd'hui" : (offset === 1 ? "Demain" : joursNom[t.getDay()]);
+                hJ += `<div class="day-group-title">${label.toUpperCase()}<br><small style="opacity:0.7">${dA}</small></div>`;
+                list.forEach(j => { hJ += `<div class="side-item">${j}</div>`; found++; });
             }
-            contJour.innerHTML = hJ || "<p style='opacity:0.6;'>Rien à signaler.</p>";
+            offset++;
         }
+        contJour.innerHTML = hJ || "<p style='opacity:0.5'>Rien à signaler.</p>";
 
         // 3. Grille Spectacles
         const grid = document.getElementById('homeGrid');
-        if (grid) {
-            let list = [];
-            baseDeDonnees.forEach(a => {
-                (a.majeurs || []).forEach(m => {
-                    const dObj = parseRougeDate(m.date);
-                    if (dObj >= d) list.push({ artist: a.nom, date: m.date, salle: m.salle, dObj: dObj });
-                });
+        let listS = [];
+        baseDeDonnees.forEach(a => {
+            (a.majeurs || []).forEach(m => {
+                const dObj = parseDate(m.date);
+                if (dObj >= d) listS.push({ artist: a.nom, date: m.date, salle: m.salle, dObj: dObj });
             });
-            list.sort((a, b) => a.dObj - b.dObj);
-            grid.innerHTML = list.map(item => `
-                <div class="card ${item.salle.toLowerCase().includes("bell") ? 'bell' : ''}">
-                    <div class="card-artist">${item.artist}</div>
-                    <div class="card-date">${item.date}</div>
-                    <div class="card-venue">${item.salle}</div>
-                </div>`).join('') || "<p style='color:#999'>Aucun événement majeur.</p>";
-        }
+        });
+        listS.sort((a, b) => a.dObj - b.dObj);
+        grid.innerHTML = listS.map(s => `
+            <div class="card ${s.salle.toLowerCase().includes("bell") ? 'bell' : ''}">
+                <div class="card-artist">${s.artist}</div>
+                <div class="card-date">${s.date}</div>
+                <div class="card-venue">${s.salle}</div>
+            </div>`).join('') || "<p style='color:#999'>Aucun événement majeur.</p>";
     }
 
-    function clean(t) { return t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
+    function cleanup(t) { return t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
 
     function faireRecherche() {
-        const q = clean(document.getElementById('searchBar').value);
+        const q = cleanup(document.getElementById('searchBar').value);
         const res = document.getElementById('resultArea');
         if (q.length < 2) { res.style.display = 'none'; return; }
-        const art = baseDeDonnees.find(a => clean(a.nom).includes(q));
+        const art = baseDeDonnees.find(a => cleanup(a.nom).includes(q));
         if (art) {
             res.style.display = 'block';
             const today = new Date(); today.setHours(0,0,0,0);
             const upcoming = [...(art.prochains || []), ...(art.majeurs || [])]
-                .filter(s => parseRougeDate(s.date) >= today)
-                .sort((a,b) => parseRougeDate(a.date) - parseRougeDate(b.date));
+                .filter(s => parseDate(s.date) >= today)
+                .sort((a,b) => parseDate(a.date) - parseDate(b.date));
             
             let h = `<div class="artist-title">${art.nom}</div>`;
             if (upcoming.length > 0) {
@@ -279,13 +281,12 @@
                 upcoming.forEach(s => h += `<div class="card ${art.majeurs && art.majeurs.includes(s) ? 'bell' : ''}"><b>${s.date}</b><span>${s.salle}</span></div>`);
             }
             const enc = encodeURIComponent(art.nom);
-            h += `<div class="btn-row">
-                    <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" class="btn btn-ticket">🎟️ Billets</a>
-                    <a href="https://www.google.com/search?q=spectacle+${enc}+Québec" target="_blank" class="btn btn-google">🔍 Recherche</a>
-                    <a href="https://news.google.com/search?q=${enc}&hl=fr-CA" target="_blank" class="btn btn-news">📰 Actus</a>
-                </div>`;
+            h += `<div class="btn-row" style="display:flex; gap:10px; margin-top:15px;">
+                <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; border:2px solid var(--rouge-rouge); color:var(--rouge-rouge); text-decoration:none; font-weight:800;">🎟️ Billets</a>
+                <a href="https://www.google.com/search?q=spectacle+${enc}+Québec" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; background:#4285F4; color:white; text-decoration:none; font-weight:800;">🔍 Recherche</a>
+            </div>`;
             res.innerHTML = h;
-        } else { res.innerHTML = `<p style='text-align:center; color:#d32f2f; font-weight:bold;'>Artiste non trouvé.</p>`; }
+        } else { res.innerHTML = "<p style='text-align:center; color:var(--rouge-rouge); font-weight:bold;'>Artiste non trouvé.</p>"; }
     }
 </script>
 </body>
