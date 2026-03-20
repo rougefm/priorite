@@ -36,7 +36,7 @@
         /* --- BARRES LATÉRALES (SIDEBARS UNIFIÉES EN ROUGE) --- */
         .sidebar { 
             width: 320px; 
-            background: var(--rouge-rouge); /* Unification visuelle */
+            background: var(--rouge-rouge); 
             color: white; 
             padding: 30px; 
             box-sizing: border-box;
@@ -227,17 +227,17 @@
     }
 
     function initialiserContenu() {
-        const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+        const joursNom = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
         const d = new Date();
-        const sequence = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
+        const sequenceIdx = [d.getDay(), (d.getDay()+1)%7, (d.getDay()+2)%7];
         const labels = ["Aujourd'hui", "Demain", "À venir"];
 
-        // 1. Priorités (Sidebar Gauche)
+        // 1. Priorités (Basé sur le jour de la semaine)
         const contPrio = document.getElementById('prioritesContainer');
         if (typeof prioritesSemaine !== 'undefined') {
             let htmlP = "";
-            sequence.forEach((idx, i) => {
-                const nomJ = jours[idx];
+            sequenceIdx.forEach((idx, i) => {
+                const nomJ = joursNom[idx];
                 htmlP += `<div class="day-group-title">${labels[i]} (${nomJ.toUpperCase()})</div>`;
                 const list = prioritesSemaine[nomJ] || [];
                 if(list.length > 0) { list.forEach(p => htmlP += `<div class="side-item">${p}</div>`); }
@@ -246,24 +246,36 @@
             contPrio.innerHTML = htmlP;
         }
 
-        // 2. Journées Mondiales (Sidebar Droite)
+        // 2. Journées Mondiales (Automatique par date calendaire)
         const contJournees = document.getElementById('journeesContainer');
         if (typeof journeesMondiales !== 'undefined') {
             let htmlJ = "";
-            sequence.forEach((idx, i) => {
-                const nomJ = jours[idx];
-                const list = journeesMondiales[nomJ] || [];
-                htmlJ += `<div class="day-group-title">${labels[i]} (${nomJ.toUpperCase()})</div>`;
+            
+            for(let i=0; i<3; i++) {
+                const targetDate = new Date();
+                targetDate.setDate(d.getDate() + i);
+                
+                // Formater en JJ-MM (ex: 20-03)
+                const dd = String(targetDate.getDate()).padStart(2, '0');
+                const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+                const key = `${dd}-${mm}`;
+                
+                const nomDuJour = joursNom[targetDate.getDay()];
+                const dateAffiche = targetDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+
+                htmlJ += `<div class="day-group-title">${labels[i]} (${nomDuJour.toUpperCase()})<br><small style="opacity:0.7">${dateAffiche}</small></div>`;
+                
+                const list = journeesMondiales[key] || [];
                 if(list.length > 0) {
                     list.forEach(j => htmlJ += `<div class="side-item">${j}</div>`);
                 } else {
                     htmlJ += `<p style="opacity:0.6; font-style:italic; font-size:0.85em;">Rien de spécial.</p>`;
                 }
-            });
+            }
             contJournees.innerHTML = htmlJ;
         }
 
-        // 3. Grille d'accueil
+        // 3. Grille d'accueil (Spectacles chronologiques)
         const grid = document.getElementById('homeGrid');
         if (typeof baseDeDonnees !== 'undefined') {
             const today = new Date();
