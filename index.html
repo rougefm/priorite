@@ -19,15 +19,16 @@
         .header img { height: 40px; }
         .header h1 { margin: 0; font-size: 24px; color: #d32f2f; }
 
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        /* Le design des deux colonnes */
+        .grid-container { display: flex; gap: 30px; }
+        .colonne { flex: 1; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .priorities-panel { border-top: 5px solid #d32f2f; }
 
-        .priorities-panel { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid #d32f2f; }
-        .priorities-panel h2 { margin-top: 0; color: #333; font-size: 20px; text-transform: capitalize; }
+        h2 { margin-top: 0; color: #333; font-size: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
         .priority-list { list-style: none; padding: 0; margin: 0; }
         .priority-list li { background: #fdf2f2; padding: 15px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid #d32f2f; font-size: 15px; line-height: 1.4; }
 
-        .search-panel { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .search-panel h2 { margin-top: 0; color: #333; font-size: 20px; }
         #searchInput { width: 100%; padding: 15px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; outline: none; margin-bottom: 20px; }
         
         .result-box { padding: 20px; border-radius: 8px; background: #f9f9f9; min-height: 100px; }
@@ -46,7 +47,7 @@
         .btn-ticketmaster { background: #026cdf; color: white; }
         .btn-google { background: #fff; color: #333; border: 1px solid #ddd; }
         
-        @media (max-width: 768px) { .grid-container { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .grid-container { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -67,12 +68,12 @@
         </div>
 
         <div class="grid-container">
-            <div class="priorities-panel">
+            <div class="colonne priorities-panel">
                 <h2 id="titre-priorites">📌 Priorités du jour</h2>
                 <ul class="priority-list" id="priorityContainer"></ul>
             </div>
 
-            <div class="search-panel">
+            <div class="colonne">
                 <h2>🔍 Recherche Artiste</h2>
                 <input type="text" id="searchInput" placeholder="Tapez un nom d'artiste..." autocomplete="off">
                 <div class="result-box" id="resultContainer">
@@ -105,12 +106,12 @@
             const container = document.getElementById('priorityContainer');
             container.innerHTML = "";
             
-            // Logique de détection du jour
             const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
             const jourActuel = jours[new Date().getDay()]; 
             
             document.getElementById('titre-priorites').innerText = "📌 Priorités du " + jourActuel;
 
+            // Utilise la variable prioritesSemaine (venant de priorites.js)
             if (typeof prioritesSemaine !== 'undefined' && prioritesSemaine[jourActuel]) {
                 prioritesSemaine[jourActuel].forEach(texte => {
                     let li = document.createElement("li");
@@ -135,7 +136,11 @@
                 return;
             }
 
-            if (typeof baseDeDonnees === 'undefined') return;
+            // Utilise la variable baseDeDonnees (venant de spectacles.js)
+            if (typeof baseDeDonnees === 'undefined') {
+                resultDiv.innerHTML = `<p style="color:red;">Erreur: Fichier spectacles.js introuvable.</p>`;
+                return;
+            }
 
             const artisteTrouve = baseDeDonnees.find(a => enleverAccents(a.nom).includes(query));
 
@@ -166,8 +171,8 @@
                 
                 html += `
                     <div class="btn-container">
-                        <a href="https://www.ticketmaster.ca/search?q=${nomPourTicketmaster}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets</a>
-                        <a href="https://www.google.com/search?q=billets+spectacle+${nomPourGoogle}+Montréal+Québec" target="_blank" class="btn-action btn-google">🔍 Google</a>
+                        <a href="https://www.ticketmaster.ca/search?q=${nomPourTicketmaster}" target="_blank" class="btn-action btn-ticketmaster">🎟️ Billets Ticketmaster</a>
+                        <a href="https://www.google.com/search?q=billets+spectacle+${nomPourGoogle}+Montréal+Québec" target="_blank" class="btn-action btn-google">🔍 Recherche Google</a>
                     </div>
                 `;
                 resultDiv.innerHTML = html;
