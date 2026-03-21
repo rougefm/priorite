@@ -135,13 +135,11 @@
     </div>
 </div>
 
-<!-- GAUCHE : PRIORITÉS -->
 <div class="sidebar">
     <h2 class="side-title">🎙️ Priorités</h2>
     <div id="prioritesContainer"></div>
 </div>
 
-<!-- CENTRE : ACTIONS -->
 <div class="main-content">
     <div class="white-card">
         <div class="search-header">
@@ -161,13 +159,11 @@
     </div>
 </div>
 
-<!-- DROITE : JOURNÉES -->
 <div class="sidebar">
     <h2 class="side-title">🌍 Journées</h2>
     <div id="journeesContainer"></div>
 </div>
 
-<!-- SCRIPTS EXTERNES -->
 <script src="priorites.js"></script>
 <script src="spectacles.js"></script>
 <script src="journees.js"></script>
@@ -281,10 +277,14 @@
                 upcoming.forEach(s => h += `<div class="card ${art.majeurs && art.majeurs.includes(s) ? 'bell' : ''}"><b>${s.date}</b><span>${s.salle}</span></div>`);
             }
             const enc = encodeURIComponent(art.nom);
+            
+            // SECTION MODIFIÉE : Les boutons de recherche (Ticketmaster et Google Actualités)
             h += `<div class="btn-row" style="display:flex; gap:10px; margin-top:15px;">
                 <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; border:2px solid var(--rouge-rouge); color:var(--rouge-rouge); text-decoration:none; font-weight:800;">🎟️ Billets</a>
-                <a href="https://www.google.com/search?q=spectacle+${enc}+Québec" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; background:#4285F4; color:white; text-decoration:none; font-weight:800;">🔍 Recherche</a>
+                <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA%3Afr" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; background:#4285F4; color:white; text-decoration:none; font-weight:800;">📰 Actualités</a>
             </div>`;
+            // FIN DE LA SECTION MODIFIÉE
+            
             res.innerHTML = h;
         } else { res.innerHTML = "<p style='text-align:center; color:var(--rouge-rouge); font-weight:bold;'>Artiste non trouvé.</p>"; }
     }
