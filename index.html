@@ -166,6 +166,7 @@
 
 <script src="priorites.js"></script>
 <script src="journees.js"></script>
+
 <script>
     const MOT_DE_PASSE = "Toujoursunhit2026";
 
@@ -183,27 +184,11 @@
     }
 
     function attendreDonnees() {
-        // On ne vérifie plus baseDeDonnees car le fichier spectacles.js a été supprimé
         if (typeof prioritesSemaine !== 'undefined' && typeof journeesMondiales !== 'undefined') {
             initialiserContenu();
         } else {
             setTimeout(attendreDonnees, 50);
         }
-    }
-
-    function parseDate(str) {
-        const moisMap = {"janvier":0,"fevrier":1,"mars":2,"avril":3,"mai":4,"juin":5,"juillet":6,"aout":7,"septembre":8,"octobre":9,"novembre":10,"decembre":11};
-        const s = str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const year = (s.match(/\d{4}/) || [new Date().getFullYear()])[0];
-        let month = 0;
-        for (let m in moisMap) { if (s.includes(m)) { month = moisMap[m]; break; } }
-        const days = s.match(/\d+/g);
-        let day = 1;
-        if (days) {
-            const fd = days.filter(d => d.length < 3);
-            if (fd.length > 0) day = parseInt(fd[fd.length - 1]);
-        }
-        return new Date(year, month, day);
     }
 
     function initialiserContenu() {
@@ -237,18 +222,17 @@
         }
         contJour.innerHTML = hJ || "<p style='opacity:0.5'>Rien à signaler.</p>";
 
-        // 3. Grille (Maintenant vide par défaut, puisqu'on utilise la recherche en direct)
+        // 3. Grille (Vide par défaut, utilise la recherche)
         const grid = document.getElementById('homeGrid');
         grid.innerHTML = "<p style='color:#999'>Recherchez un artiste plus haut pour voir toutes ses dates de tournée et son actualité en temps réel !</p>";
     }
 
     function cleanup(t) { return t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
 
-    // --- NOUVELLES FONCTIONS POUR L'API ET LA GÉOLOCALISATION ---
+    // --- FONCTIONS POUR L'API ET LA GÉOLOCALISATION ---
 
-    // Formule pour calculer la distance en km entre deux points GPS (à vol d'oiseau)
     function calculerDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371; // Rayon de la Terre en km
+        const R = 6371; 
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLon = (lon2 - lon1) * Math.PI / 180;
         const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -258,7 +242,6 @@
         return R * c;
     }
 
-    // Fonction de recherche connectée au web
     async function faireRecherche() {
         const inputValeur = document.getElementById('searchBar').value.trim();
         const q = cleanup(inputValeur);
@@ -266,7 +249,6 @@
         
         if (q.length < 2) { res.style.display = 'none'; return; }
         
-        // Message de chargement
         res.style.display = 'block';
         res.innerHTML = "<p style='text-align:center; color:#888;'>Recherche en cours sur le web... 📡</p>";
 
@@ -274,47 +256,41 @@
         const enc = encodeURIComponent(nomRecherche);
 
         try {
-            // Appel à l'API Bandsintown
-            const reponseAPI = await fetch(`https://rest.bandsintown.com/artists/${enc}/events?app_id=rouge_fm`);
+            // Utilisation du proxy public pour contourner les bloqueurs et les erreurs de fichiers locaux
+            const urlBandsintown = `https://rest.bandsintown.com/artists/${enc}/events?app_id=rouge_fm_test`;
+            const urlProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(urlBandsintown)}`;
+
+            const reponseAPI = await fetch(urlProxy);
+            
+            if (!reponseAPI.ok) {
+                throw new Error(`Le serveur a refusé l'accès (Code d'erreur: ${reponseAPI.status})`);
+            }
+
             const evenements = await reponseAPI.json();
 
             let h = `<div class="artist-title">${nomRecherche}</div>`;
 
-            // Si l'API ne renvoie rien ou une erreur
             if (!Array.isArray(evenements) || evenements.length === 0) {
                 h += `<p style='color:#666; font-style:italic;'>Aucune date de tournée annoncée pour le moment.</p>`;
             } else {
-                // Coordonnées approximatives de Montréal (Centre-Ville)
                 const MTL_LAT = 45.5017;
                 const MTL_LON = -73.5673;
 
-                let grandMontreal = [];
-                let canada = [];
-                let monde = [];
+                let grandMontreal = [], canada = [], monde = [];
 
-                // Tri chronologique
                 evenements.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
 
-                // Classement des événements selon la distance
                 evenements.forEach(ev => {
                     const lat = parseFloat(ev.venue.latitude);
                     const lon = parseFloat(ev.venue.longitude);
                     let distance = 99999; 
-                    
-                    if (!isNaN(lat) && !isNaN(lon)) {
-                        distance = calculerDistance(MTL_LAT, MTL_LON, lat, lon);
-                    }
+                    if (!isNaN(lat) && !isNaN(lon)) distance = calculerDistance(MTL_LAT, MTL_LON, lat, lon);
 
-                    if (distance <= 30) {
-                        grandMontreal.push(ev);
-                    } else if (ev.venue.country === "Canada") {
-                        canada.push(ev);
-                    } else {
-                        monde.push(ev);
-                    }
+                    if (distance <= 30) grandMontreal.push(ev);
+                    else if (ev.venue.country === "Canada") canada.push(ev);
+                    else monde.push(ev);
                 });
 
-                // Fonction utilitaire pour générer l'HTML d'une section
                 const genererSection = (titre, liste) => {
                     if (liste.length === 0) return "";
                     let html = `<div class="section-label">📅 ${titre}</div>`;
@@ -327,13 +303,11 @@
                     return html;
                 };
 
-                // Affichage des catégories dans l'ordre demandé
                 h += genererSection("Grand Montréal (Moins de 30 km)", grandMontreal);
                 h += genererSection("Ailleurs au Canada", canada);
                 h += genererSection("International", monde);
             }
 
-            // Ajout des boutons Ticketmaster et Actualités
             h += `<div class="btn-row" style="display:flex; gap:10px; margin-top:15px;">
                 <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; border:2px solid var(--rouge-rouge); color:var(--rouge-rouge); text-decoration:none; font-weight:800;">🎟️ Billets</a>
                 <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA%3Afr" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; background:#4285F4; color:white; text-decoration:none; font-weight:800;">📰 Actualités</a>
@@ -342,11 +316,12 @@
             res.innerHTML = h;
 
         } catch (erreur) {
-            console.error("Erreur API:", erreur);
-            
-            // Si l'API échoue, on affiche quand même les boutons de recherche de secours
+            console.error("Détail de l'erreur :", erreur);
             let hErreur = `<div class="artist-title">${nomRecherche}</div>`;
-            hErreur += `<p style='text-align:center; color:var(--rouge-rouge); font-weight:bold;'>Impossible de charger les spectacles en direct.</p>`;
+            
+            hErreur += `<p style='text-align:center; color:var(--rouge-rouge); font-weight:bold;'>Erreur technique: ${erreur.message}</p>`;
+            hErreur += `<p style='text-align:center; font-size:0.9em; color:#666;'>Astuce: Si vous utilisez un bloqueur de publicité (comme AdBlock), essayez de le désactiver pour ce site.</p>`;
+            
             hErreur += `<div class="btn-row" style="display:flex; gap:10px; margin-top:15px;">
                 <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; border:2px solid var(--rouge-rouge); color:var(--rouge-rouge); text-decoration:none; font-weight:800;">🎟️ Billets</a>
                 <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA%3Afr" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; background:#4285F4; color:white; text-decoration:none; font-weight:800;">📰 Actualités</a>
