@@ -102,7 +102,19 @@
 
         /* RÉSULTATS */
         #resultArea { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; display: none; }
-        .artist-title { font-size: 1.8em; font-weight: 900; text-transform: uppercase; border-bottom: 5px solid var(--rouge-rouge); padding-bottom: 8px; margin-bottom: 15px; }
+        
+        /* Conteneur d'un artiste trouvé */
+        .artist-block {
+            background: #fff;
+            border: 1px solid #eee;
+            border-left: 6px solid #444;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .artist-title { font-size: 1.8em; font-weight: 900; text-transform: uppercase; border-bottom: 3px solid var(--rouge-rouge); padding-bottom: 8px; margin-bottom: 15px; display: inline-block;}
         .section-label { font-size: 0.8em; text-transform: uppercase; color: #888; font-weight: 800; margin: 15px 0 10px 0; border-left: 4px solid var(--rouge-rouge); padding-left: 10px; }
 
         /* GRILLE SPECTACLES */
@@ -146,13 +158,13 @@
             <h1>Calendrier des spectacles</h1>
             <p class="slogan">Toujours un hit</p>
         </div>
-        <input type="text" id="searchBar" placeholder="Rechercher un artiste..." onkeyup="faireRecherche()">
+        <input type="text" id="searchBar" placeholder="Ex: Tapez 'Cardin' pour trouver Charlotte Cardin..." onkeyup="faireRecherche()">
         <div id="resultArea"></div>
     </div>
 
     <div class="white-card">
         <h2 style="text-transform: uppercase; font-weight: 900; margin: 0; font-size: 1.1em; display: flex; align-items: center; gap: 10px;">
-            🎟️ Astuce
+            🎟️ Événements à venir
         </h2>
         <div style="height: 1px; background: #eee; margin: 15px 0;"></div>
         <div class="grid-shows" id="homeGrid"></div>
@@ -165,7 +177,7 @@
 </div>
 
 <script src="priorites.js"></script>
-<script src="journees.js"></script>
+<script src="spectacles.js"></script> <script src="journees.js"></script>
 
 <script>
     const MOT_DE_PASSE = "Toujoursunhit2026";
@@ -184,11 +196,27 @@
     }
 
     function attendreDonnees() {
-        if (typeof prioritesSemaine !== 'undefined' && typeof journeesMondiales !== 'undefined') {
+        if (typeof prioritesSemaine !== 'undefined' && typeof baseDeDonnees !== 'undefined' && typeof journeesMondiales !== 'undefined') {
             initialiserContenu();
         } else {
             setTimeout(attendreDonnees, 50);
         }
+    }
+
+    function parseDate(str) {
+        if(!str) return new Date(1970, 0, 1);
+        const moisMap = {"janvier":0,"fevrier":1,"mars":2,"avril":3,"mai":4,"juin":5,"juillet":6,"aout":7,"septembre":8,"octobre":9,"novembre":10,"decembre":11};
+        const s = str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const year = (s.match(/\d{4}/) || [new Date().getFullYear()])[0];
+        let month = 0;
+        for (let m in moisMap) { if (s.includes(m)) { month = moisMap[m]; break; } }
+        const days = s.match(/\d+/g);
+        let day = 1;
+        if (days) {
+            const fd = days.filter(d => d.length < 3);
+            if (fd.length > 0) day = parseInt(fd[fd.length - 1]);
+        }
+        return new Date(year, month, day);
     }
 
     function initialiserContenu() {
@@ -222,109 +250,101 @@
         }
         contJour.innerHTML = hJ || "<p style='opacity:0.5'>Rien à signaler.</p>";
 
+        // 3. Grille (Les spectacles majeurs à venir)
         const grid = document.getElementById('homeGrid');
-        grid.innerHTML = "<p style='color:#999'>Recherchez un artiste plus haut pour voir toutes ses dates de tournée et son actualité en temps réel !</p>";
+        let listS = [];
+        baseDeDonnees.forEach(a => {
+            (a.majeurs || []).forEach(m => {
+                const dObj = parseDate(m.date);
+                if (dObj >= d) listS.push({ artist: a.nom, date: m.date, salle: m.salle, dObj: dObj });
+            });
+        });
+        listS.sort((a, b) => a.dObj - b.dObj);
+        grid.innerHTML = listS.map(s => `
+            <div class="card ${s.salle && s.salle.toLowerCase().includes("bell") ? 'bell' : ''}">
+                <div class="card-artist">${s.artist}</div>
+                <div class="card-date">${s.date}</div>
+                <div class="card-venue">${s.salle || 'À confirmer'}</div>
+            </div>`).join('') || "<p style='color:#999'>Aucun événement majeur pour le moment.</p>";
     }
 
-    function cleanup(t) { return t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
-
-    function calculerDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371; 
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                  Math.sin(dLon/2) * Math.sin(dLon/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return R * c;
+    // Fonction pour retirer les accents et les majuscules (rend la recherche facile!)
+    function cleanup(t) { 
+        if(!t) return "";
+        return t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); 
     }
 
-    async function faireRecherche() {
-        const inputValeur = document.getElementById('searchBar').value.trim();
-        const q = cleanup(inputValeur);
-        const res = document.getElementById('resultArea');
+    // --- LE NOUVEAU MOTEUR DE RECHERCHE INTELLIGENT ---
+    function faireRecherche() {
+        const inputValeur = document.getElementById('searchBar').value;
+        const requete = cleanup(inputValeur);
+        const zoneResultat = document.getElementById('resultArea');
         
-        if (q.length < 2) { res.style.display = 'none'; return; }
-        
-        res.style.display = 'block';
-        res.innerHTML = "<p style='text-align:center; color:#888;'>Recherche en cours sur le web... 📡</p>";
+        if (requete.length < 2) { 
+            zoneResultat.style.display = 'none'; 
+            return; 
+        }
 
-        const nomRecherche = inputValeur;
-        const enc = encodeURIComponent(nomRecherche);
+        // RECHERCHE PARTIELLE : On trouve TOUS les artistes dont le nom contient les lettres tapées
+        const resultats = baseDeDonnees.filter(a => cleanup(a.nom).includes(requete));
 
-        try {
-            // APPEL DIRECT À L'API (Sans proxy)
-            const urlBandsintown = `https://rest.bandsintown.com/artists/${enc}/events?app_id=rouge_fm_test`;
-            const reponseAPI = await fetch(urlBandsintown);
-            
-            if (!reponseAPI.ok) {
-                if(reponseAPI.status === 404) {
-                    throw new Error("Cet artiste n'a pas de dates annoncées ou est introuvable sur la plateforme.");
-                } else {
-                    throw new Error(`Le serveur a refusé l'accès (Code: ${reponseAPI.status})`);
+        if (resultats.length > 0) {
+            zoneResultat.style.display = 'block';
+            let htmlHTML = "";
+
+            // On boucle sur tous les artistes trouvés
+            resultats.forEach(art => {
+                
+                htmlHTML += `<div class="artist-block">`;
+                htmlHTML += `<div class="artist-title">${art.nom}</div>`;
+
+                // S'il y a des infos ou potins (si ton fichier a un champ "infos")
+                if(art.infos && art.infos.length > 2) {
+                    htmlHTML += `<div style="background:#fff3cd; color:#856404; padding:10px; border-radius:8px; font-weight:bold; margin-bottom:15px;">🎙️ Info Studio : ${art.infos}</div>`;
                 }
-            }
 
-            const evenements = await reponseAPI.json();
-            let h = `<div class="artist-title">${nomRecherche}</div>`;
-
-            if (!Array.isArray(evenements) || evenements.length === 0) {
-                h += `<p style='color:#666; font-style:italic;'>Aucune date de tournée annoncée pour le moment.</p>`;
-            } else {
-                const MTL_LAT = 45.5017;
-                const MTL_LON = -73.5673;
-
-                let grandMontreal = [], canada = [], monde = [];
-
-                evenements.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
-
-                evenements.forEach(ev => {
-                    const lat = parseFloat(ev.venue.latitude);
-                    const lon = parseFloat(ev.venue.longitude);
-                    let distance = 99999; 
-                    if (!isNaN(lat) && !isNaN(lon)) distance = calculerDistance(MTL_LAT, MTL_LON, lat, lon);
-
-                    if (distance <= 30) grandMontreal.push(ev);
-                    else if (ev.venue.country === "Canada") canada.push(ev);
-                    else monde.push(ev);
-                });
-
-                const genererSection = (titre, liste) => {
-                    if (liste.length === 0) return "";
-                    let html = `<div class="section-label">📅 ${titre}</div>`;
-                    liste.forEach(s => {
-                        const d = new Date(s.datetime);
-                        const dateFormatee = d.toLocaleDateString('fr-CA', { day: 'numeric', month: 'long', year: 'numeric' });
-                        const estCentreBell = s.venue.name.toLowerCase().includes("bell") ? 'bell' : '';
-                        html += `<div class="card ${estCentreBell}"><b>${dateFormatee}</b><span>${s.venue.name}, ${s.venue.city}</span></div>`;
+                const today = new Date(); today.setHours(0,0,0,0);
+                const upcoming = [...(art.prochains || []), ...(art.majeurs || [])]
+                    .filter(s => parseDate(s.date) >= today)
+                    .sort((a,b) => parseDate(a.date) - parseDate(b.date));
+                
+                if (upcoming.length > 0) {
+                    htmlHTML += `<div class="section-label">📅 Prochaines dates dans la base</div>`;
+                    htmlHTML += `<div class="grid-shows">`;
+                    upcoming.forEach(s => {
+                        const estMajeur = art.majeurs && art.majeurs.includes(s) ? 'bell' : '';
+                        htmlHTML += `<div class="card ${estMajeur}"><b>${s.date}</b><span>${s.salle}</span></div>`;
                     });
-                    return html;
-                };
+                    htmlHTML += `</div>`;
+                }
 
-                h += genererSection("Grand Montréal (Moins de 30 km)", grandMontreal);
-                h += genererSection("Ailleurs au Canada", canada);
-                h += genererSection("International", monde);
-            }
+                // Génération des boutons Ticketmaster et Google News pour l'artiste
+                const enc = encodeURIComponent(art.nom);
+                htmlHTML += `<div class="btn-row" style="display:flex; gap:10px; margin-top:15px;">
+                    <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; border:2px solid var(--rouge-rouge); color:var(--rouge-rouge); text-decoration:none; font-weight:800; transition:0.2s;">🎟️ Trouver des Billets</a>
+                    <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA%3Afr" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; background:#4285F4; color:white; text-decoration:none; font-weight:800; transition:0.2s;">📰 Voir l'Actualité</a>
+                </div>`;
 
-            h += `<div class="btn-row" style="display:flex; gap:10px; margin-top:15px;">
-                <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; border:2px solid var(--rouge-rouge); color:var(--rouge-rouge); text-decoration:none; font-weight:800;">🎟️ Billets</a>
-                <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA%3Afr" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; background:#4285F4; color:white; text-decoration:none; font-weight:800;">📰 Actualités</a>
-            </div>`;
-            
-            res.innerHTML = h;
+                htmlHTML += `</div>`; // Fin du block artiste
+            });
 
-        } catch (erreur) {
-            console.error("Détail de l'erreur :", erreur);
-            let hErreur = `<div class="artist-title">${nomRecherche}</div>`;
+            zoneResultat.innerHTML = htmlHTML;
+
+        } else { 
+            // Si on ne trouve absolument rien
+            zoneResultat.style.display = 'block';
             
-            hErreur += `<p style='text-align:center; color:var(--rouge-rouge); font-weight:bold;'>${erreur.message}</p>`;
-            hErreur += `<p style='text-align:center; font-size:0.9em; color:#666;'>Astuce: Si vous avez un bloqueur de publicité (AdBlock), désactivez-le pour cette page.</p>`;
-            
-            hErreur += `<div class="btn-row" style="display:flex; gap:10px; margin-top:15px;">
-                <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; border:2px solid var(--rouge-rouge); color:var(--rouge-rouge); text-decoration:none; font-weight:800;">🎟️ Billets</a>
-                <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA%3Afr" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; background:#4285F4; color:white; text-decoration:none; font-weight:800;">📰 Actualités</a>
-            </div>`;
-            res.innerHTML = hErreur;
+            // On offre quand même la possibilité de chercher sur Ticketmaster/Google avec ce qui a été tapé
+            const enc = encodeURIComponent(inputValeur);
+            zoneResultat.innerHTML = `
+                <div class="artist-block" style="border-left-color: var(--rouge-rouge);">
+                    <p style='text-align:center; color:var(--rouge-rouge); font-weight:bold; font-size:1.2em;'>Artiste introuvable dans le répertoire.</p>
+                    <p style='text-align:center; color:#666;'>Vous pouvez tout de même lancer une recherche rapide sur le web :</p>
+                    <div class="btn-row" style="display:flex; gap:10px; margin-top:15px;">
+                        <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; border:2px solid var(--rouge-rouge); color:var(--rouge-rouge); text-decoration:none; font-weight:800;">🎟️ Chercher Billets</a>
+                        <a href="https://news.google.com/search?q=${enc}&hl=fr-CA&gl=CA&ceid=CA%3Afr" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; background:#4285F4; color:white; text-decoration:none; font-weight:800;">📰 Chercher Actualités</a>
+                    </div>
+                </div>`; 
         }
     }
 </script>
