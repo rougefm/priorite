@@ -222,14 +222,11 @@
         }
         contJour.innerHTML = hJ || "<p style='opacity:0.5'>Rien à signaler.</p>";
 
-        // 3. Grille (Vide par défaut, utilise la recherche)
         const grid = document.getElementById('homeGrid');
         grid.innerHTML = "<p style='color:#999'>Recherchez un artiste plus haut pour voir toutes ses dates de tournée et son actualité en temps réel !</p>";
     }
 
     function cleanup(t) { return t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
-
-    // --- FONCTIONS POUR L'API ET LA GÉOLOCALISATION ---
 
     function calculerDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; 
@@ -256,18 +253,19 @@
         const enc = encodeURIComponent(nomRecherche);
 
         try {
-            // Utilisation du proxy public pour contourner les bloqueurs et les erreurs de fichiers locaux
+            // APPEL DIRECT À L'API (Sans proxy)
             const urlBandsintown = `https://rest.bandsintown.com/artists/${enc}/events?app_id=rouge_fm_test`;
-            const urlProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(urlBandsintown)}`;
-
-            const reponseAPI = await fetch(urlProxy);
+            const reponseAPI = await fetch(urlBandsintown);
             
             if (!reponseAPI.ok) {
-                throw new Error(`Le serveur a refusé l'accès (Code d'erreur: ${reponseAPI.status})`);
+                if(reponseAPI.status === 404) {
+                    throw new Error("Cet artiste n'a pas de dates annoncées ou est introuvable sur la plateforme.");
+                } else {
+                    throw new Error(`Le serveur a refusé l'accès (Code: ${reponseAPI.status})`);
+                }
             }
 
             const evenements = await reponseAPI.json();
-
             let h = `<div class="artist-title">${nomRecherche}</div>`;
 
             if (!Array.isArray(evenements) || evenements.length === 0) {
@@ -319,8 +317,8 @@
             console.error("Détail de l'erreur :", erreur);
             let hErreur = `<div class="artist-title">${nomRecherche}</div>`;
             
-            hErreur += `<p style='text-align:center; color:var(--rouge-rouge); font-weight:bold;'>Erreur technique: ${erreur.message}</p>`;
-            hErreur += `<p style='text-align:center; font-size:0.9em; color:#666;'>Astuce: Si vous utilisez un bloqueur de publicité (comme AdBlock), essayez de le désactiver pour ce site.</p>`;
+            hErreur += `<p style='text-align:center; color:var(--rouge-rouge); font-weight:bold;'>${erreur.message}</p>`;
+            hErreur += `<p style='text-align:center; font-size:0.9em; color:#666;'>Astuce: Si vous avez un bloqueur de publicité (AdBlock), désactivez-le pour cette page.</p>`;
             
             hErreur += `<div class="btn-row" style="display:flex; gap:10px; margin-top:15px;">
                 <a href="https://www.ticketmaster.ca/search?q=${enc}" target="_blank" style="flex:1; padding:10px; text-align:center; border-radius:8px; border:2px solid var(--rouge-rouge); color:var(--rouge-rouge); text-decoration:none; font-weight:800;">🎟️ Billets</a>
