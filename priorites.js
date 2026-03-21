@@ -26,9 +26,9 @@ const prioritesSemaine = {
         "Demain 16h: Il va faire chaud avec Playa Del Party"
     ],
     "samedi": [
-        "Le décompte Rouge avec les plus gros hits",
-        "Spécial : Les coulisses du FEQ",
-        "Rappel : Sortie du nouveau clip de FouKi"
+        "Le top25 de Rouge avec Denis et Gégé. La compil iHeart dès 9h",
+        "Denis vous offre 2h de hits sans pause + billets Gaga",
+        "Dès 16h: Il va faire chaud 🌴😎🏖️ avec Playa Del Party"
     ],
     "dimanche": [
         "Dimanche Douceur : Les plus belles balades",
